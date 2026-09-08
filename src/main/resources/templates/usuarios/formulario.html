@@ -3,125 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alta de Técnico - Ineco</title>
-    <!-- Bootstrap 5 CDN -->
+    <title>Alta de Personal Técnico - Ineco</title>
+    <!-- Estilos y fuentes profesionales -->
     <link href="https://jsdelivr.net" rel="stylesheet">
-    <!-- Iconos de Bootstrap -->
     <link href="https://jsdelivr.net" rel="stylesheet">
     <style>
-        .navbar-ineco {
-            background-color: #0056b3;
-        }
-        .wrapper {
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-        .card-form {
-            border: none;
-            border-radius: 8px;
-        }
+        :root { --ineco-blue: #0056b3; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .navbar-ineco { background-color: var(--ineco-blue); }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .form-control:focus, .form-select:focus { border-color: var(--ineco-blue); box-shadow: 0 0 0 0.25px rgba(0,86,179,0.25); }
+        .input-group-text { background-color: #f8f9fa; color: #6c757d; }
     </style>
 </head>
 <body>
-<div class="wrapper">
 
-    <!-- Barra de Navegación Superior -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm mb-5">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">ineco</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/oficinas}"><i class="bi bi-building"></i> Oficinas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <span class="text-white me-3" th:text="${#authentication.name}">Usuario</span>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Salir</button>
-                    </form>
-                </div>
-            </div>
+            <a class="navbar-brand fw-bold" href="/gestion-oficinas/oficinas">ineco</a>
         </div>
     </nav>
 
-    <!-- Contenido del Formulario -->
-    <div class="container my-5">
+    <!-- Contenedor del Formulario -->
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 
-                <a th:href="@{/usuarios}" class="btn btn-sm btn-link text-secondary mb-3 p-0 text-decoration-none">
-                    <i class="bi bi-arrow-left"></i> Volver al panel de personal
+                <a href="/gestion-oficinas/usuarios" class="btn btn-sm btn-link text-secondary text-decoration-none mb-3">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Volver al panel de personal
                 </a>
 
-                <div class="card card-form shadow-sm p-4 bg-white">
-                    <h3 class="fw-bold text-dark mb-1">Dar de Alta Operador Técnico</h3>
-                    <p class="text-muted mb-4 text-sm">Registre credenciales del empleado. La contraseña se cifrará automáticamente por seguridad.</p>
+                <div class="card card-custom p-4 bg-white">
+                    <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success me-3">
+                            <i class="bi bi-person-vcard fs-3"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Alta de Personal Técnico</h4>
+                            <small class="text-muted">Registro de credenciales para el control de accesos e informes de red.</small>
+                        </div>
+                    </div>
 
-                    <!-- Alerta si hay duplicados -->
-                    <div th:if="${error}" class="alert alert-danger p-2 text-center text-sm mb-4" role="alert" th:text="${error}">
-                        Error al procesar el usuario.
+                    <!-- Alerta de Errores -->
+                    <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                        <div th:text="${error}">Error al procesar</div>
                     </div>
 
                     <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
                         
                         <!-- Nombre Completo -->
-                        <div class="mb-3">
-                            <label for="nombreCompleto" class="form-label text-secondary fw-semibold">Nombre y Apellidos</label>
-                            <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" class="form-control" placeholder="Ej: Maria Gómez Pérez" required>
+                        <div class="mb-4">
+                            <label for="nombreCompleto" class="form-label fw-semibold text-secondary">Nombre y Apellidos</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" class="form-control" placeholder="Ej: Juan Pérez Expósito" required>
+                            </div>
                         </div>
 
-                        <div class="row">
-                            <!-- Nombre de Usuario / Login -->
-                            <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label text-secondary fw-semibold">Usuario de Red (Login)</label>
-                                <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="ej: mgomez" required>
+                        <div class="row g-3 mb-4">
+                            <!-- Nombre de Usuario (Login) -->
+                            <div class="col-md-6">
+                                <label for="username" class="form-label fw-semibold text-secondary">Usuario de Red (Login)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
+                                    <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="ej: jpexposito" required>
+                                </div>
                             </div>
                             
                             <!-- Contraseña -->
-                            <div class="col-md-6 mb-3">
-                                <label for="password" class="form-label text-secondary fw-semibold">Contraseña Inicial</label>
-                                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="••••••••" required>
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-semibold text-secondary">Contraseña de Acceso</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                                    <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="••••••••" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <!-- Asignación de Oficina -->
-                            <div class="col-md-6 mb-4">
-                                <label for="oficina" class="form-label text-secondary fw-semibold">Oficina Técnica Adscrita</label>
-                                <select id="oficina" th:field="*{oficina}" class="form-select" required>
-                                    <option value="" disabled selected>Seleccione una sede...</option>
-                                    <!-- Carga dinámicamente las oficinas existentes -->
-                                    <option th:each="of : ${oficinas}" th:value="${of.id}" th:text="${of.nombre}"></option>
-                                </select>
+                        <div class="row g-3 mb-4">
+                            <!-- Desplegable dinámico de Oficinas Técnicas -->
+                            <div class="col-md-6">
+                                <label for="oficina" class="form-label fw-semibold text-secondary">Sede Técnico-Administrativa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-fill"></i></span>
+                                    <select id="oficina" th:field="*{oficina}" class="form-select" required>
+                                        <option value="" disabled selected th:text="'Seleccione destino...'">Seleccione destino...</option>
+                                        <option th:each="of : ${oficinas}" th:value="${of.id}" th:text="${of.nombre}"></option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <!-- Rol del Sistema -->
-                            <div class="col-md-6 mb-4">
-                                <label for="rol" class="form-label text-secondary fw-semibold">Rol de Autorización</label>
-                                <select id="rol" th:field="*{rol}" class="form-select" required>
-                                    <option value="ROLE_CONSULTOR">Consultor Técnico (Lectura/Escritura)</option>
-                                    <option value="ROLE_ADMIN">Administrador General (Control Total)</option>
-                                </select>
+                            <!-- Desplegable de Roles -->
+                            <div class="col-md-6">
+                                <label for="rol" class="form-label fw-semibold text-secondary">Rol de Permisos</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+                                    <select id="rol" th:field="*{rol}" class="form-select" required>
+                                        <option value="ROLE_CONSULTOR">Consultor Área (Lectura/Escritura)</option>
+                                        <option value="ROLE_ADMIN">Administrador Ineco (Control Total)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Botones -->
+                        <!-- Botones Operativos -->
                         <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                            <a th:href="@{/usuarios}" class="btn btn-light px-4">Cancelar</a>
-                            <button type="submit" class="btn btn-primary px-4">Guardar Alta</button>
+                            <a href="/gestion-oficinas/usuarios" class="btn btn-light px-4 border">Cancelar</a>
+                            <button type="submit" class="btn btn-success px-4 fw-semibold shadow-sm">
+                                <i class="bi bi-person-check-fill me-1"></i> Habilitar Cuenta
+                            </button>
                         </div>
-
                     </form>
                 </div>
 
             </div>
         </div>
     </div>
-</div>
 
 <script src="https://jsdelivr.net"></script>
 </body>

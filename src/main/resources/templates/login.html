@@ -13,21 +13,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
         .card-login {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             max-width: 400px;
             width: 100%;
         }
         .btn-ineco {
             background-color: #0056b3;
             color: white;
+            transition: background-color 0.2s ease;
         }
         .btn-ineco:hover {
             background-color: #004085;
             color: white;
+        }
+        .logo-img {
+            max-height: 55px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -35,18 +41,20 @@
 
 <div class="card card-login p-4 bg-white">
     <div class="text-center mb-4">
-        <!-- Logo corporativo o título -->
-        <h3 class="fw-bold text-primary">ineco</h3>
-        <p class="text-muted text-sm">Gestión de Oficinas e Infraestructuras</p>
+        <!-- Carga del logotipo local en formato JPEG -->
+        <img th:src="@{/images/Logo_Ineco.jpg}" 
+             alt="Ineco Corporativo" 
+             class="img-fluid mb-2 logo-img">
+        <p class="text-muted small mt-2">Gestión de Oficinas e Infraestructuras</p>
     </div>
 
     <!-- Mensaje de Error (si las credenciales fallan) -->
-    <div th:if="${param.error}" class="alert alert-danger p-2 text-center text-sm" role="alert">
+    <div th:if="${param.error}" class="alert alert-danger p-2 text-center small animate__animated animate__fadeIn" role="alert">
         Usuario o contraseña incorrectos.
     </div>
 
     <!-- Mensaje de Desconexión (si cerró sesión correctamente) -->
-    <div th:if="${param.logout}" class="alert alert-success p-2 text-center text-sm" role="alert">
+    <div th:if="${param.logout}" class="alert alert-success p-2 text-center small" role="alert">
         Has cerrado sesión con éxito.
     </div>
 
@@ -54,12 +62,12 @@
     <form th:action="@{/login}" method="post">
         
         <div class="mb-3">
-            <label for="username" class="form-label text-secondary fw-semibold">Usuario de Red</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="ej: usuario@ineco.es" required autofocus>
+            <label for="username" class="form-label text-secondary fw-semibold small">Usuario de Red</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="ej: usuario" required autofocus>
         </div>
 
         <div class="mb-4">
-            <label for="password" class="form-label text-secondary fw-semibold">Contraseña</label>
+            <label for="password" class="form-label text-secondary fw-semibold small">Contraseña</label>
             <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
         </div>
 

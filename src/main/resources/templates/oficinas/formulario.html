@@ -4,109 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Oficina - Ineco</title>
-    <!-- Bootstrap 5 CDN -->
+    <!-- Estilos y fuentes profesionales -->
     <link href="https://jsdelivr.net" rel="stylesheet">
-    <!-- Iconos de Bootstrap -->
     <link href="https://jsdelivr.net" rel="stylesheet">
     <style>
-        .navbar-ineco {
-            background-color: #0056b3;
-        }
-        .wrapper {
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-        .card-form {
-            border: none;
-            border-radius: 8px;
-        }
+        :root { --ineco-blue: #0056b3; --ineco-dark: #003366; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .navbar-ineco { background-color: var(--ineco-blue); }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .form-control:focus, .form-select:focus { border-color: var(--ineco-blue); box-shadow: 0 0 0 0.25px rgba(0,86,179,0.25); }
+        .input-group-text { background-color: #f8f9fa; color: #6c757d; }
     </style>
 </head>
 <body>
-<div class="wrapper">
 
-    <!-- Barra de Navegación Superior (Idéntica para mantener consistencia) -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm mb-5">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">ineco</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/oficinas}"><i class="bi bi-building"></i> Oficinas</a>
-                    </li>
-                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                        <a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <span class="text-white me-3" th:text="${#authentication.name}">Usuario</span>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Salir</button>
-                    </form>
-                </div>
-            </div>
+            <a class="navbar-brand fw-bold" href="/gestion-oficinas/oficinas">ineco</a>
         </div>
     </nav>
 
-    <!-- Contenido del Formulario -->
-    <div class="container my-5">
+    <!-- Contenedor del Formulario -->
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-7">
                 
-                <!-- Enlace para volver atrás -->
-                <a th:href="@{/oficinas}" class="btn btn-sm btn-link text-secondary mb-3 p-0 text-decoration-none">
-                    <i class="bi bi-arrow-left"></i> Volver al listado
+                <a href="/gestion-oficinas/oficinas" class="btn btn-sm btn-link text-secondary text-decoration-none mb-3">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Volver al listado corporativo
                 </a>
 
-                <div class="card card-form shadow-sm p-4 bg-white">
-                    <!-- Título dinámico según la operación -->
-                    <h3 class="fw-bold text-dark mb-1" th:text="${oficina.id == null} ? 'Registrar Nueva Oficina' : 'Modificar Oficina'">Formulario Oficina</h3>
-                    <p class="text-muted mb-4 text-sm">Introduzca los datos técnicos requeridos para la base de datos de infraestructuras.</p>
-
-                    <!-- Alerta de error en caso de validación fallida (ej. Nombre duplicado) -->
-                    <div th:if="${error}" class="alert alert-danger p-2 text-center text-sm mb-4" role="alert" th:text="${error}">
-                        Mensaje de error.
+                <div class="card card-custom p-4 bg-white">
+                    <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary me-3">
+                            <i class="bi bi-building-gear fs-3"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0" th:text="${oficina.id == null} ? 'Registrar Oficina Técnica' : 'Modificar Parámetros de Sede'">Formulario</h4>
+                            <small class="text-muted">Mapeo de delegaciones territoriales e infraestructuras locales.</small>
+                        </div>
                     </div>
 
-                    <!-- Formulario mapeado con el objeto del controlador -->
+                    <!-- Mensaje de Error Informativo -->
+                    <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div th:text="${error}">Error en el servidor</div>
+                    </div>
+
                     <form th:action="@{/oficinas/guardar}" th:object="${oficina}" method="post">
-                        
-                        <!-- Campo oculto imprescindible para saber si estamos editando o creando -->
                         <input type="hidden" th:field="*{id}">
 
-                        <div class="row">
-                            <!-- Código Interno -->
-                            <div class="col-md-4 mb-3">
-                                <label for="codigoOficina" class="form-label text-secondary fw-semibold">Código Interno</label>
-                                <input type="text" id="codigoOficina" th:field="*{codigoOficina}" class="form-control text-uppercase" placeholder="Ej: OFI-LUG" required>
+                        <div class="row g-3 mb-4">
+                            <!-- Código de Oficina con Icono -->
+                            <div class="col-md-4">
+                                <label for="codigoOficina" class="form-label fw-semibold text-secondary">Código Interno</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-qr-code"></i></span>
+                                    <input type="text" id="codigoOficina" th:field="*{codigoOficina}" class="form-control text-uppercase" placeholder="Ej: OFI-LUG" required>
+                                </div>
                             </div>
                             
-                            <!-- Nombre de la Oficina -->
-                            <div class="col-md-8 mb-3">
-                                <label for="nombre" class="form-label text-secondary fw-semibold">Nombre de la Oficina</label>
-                                <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Ej: Delegación Provincial de Lugo" required>
+                            <!-- Nombre Oficial -->
+                            <div class="col-md-8">
+                                <label for="nombre" class="form-label fw-semibold text-secondary">Nombre de la Sede</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-bookmark-dash"></i></span>
+                                    <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Ej: Delegación Territorial de Lugo" required>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Ubicación / Dirección -->
+                        <!-- Ubicación Física -->
                         <div class="mb-4">
-                            <label for="ubicacion" class="form-label text-secondary fw-semibold">Ubicación / Región Terrenal</label>
-                            <input type="text" id="ubicacion" th:field="*{ubicacion}" class="form-control" placeholder="Ej: Plaza de la Xunta S/N, Galicia">
+                            <label for="ubicacion" class="form-label fw-semibold text-secondary">Ubicación / Región Terrenal</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                                <input type="text" id="ubicacion" th:field="*{ubicacion}" class="form-control" placeholder="Ej: Plaza de la Xunta S/N, Galicia">
+                            </div>
                         </div>
 
-                        <!-- Botones de Acción -->
+                        <!-- Botones Operativos -->
                         <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                            <a th:href="@{/oficinas}" class="btn btn-light px-4">Cancelar</a>
-                            <button type="submit" class="btn btn-primary px-4" th:text="${oficina.id == null} ? 'Guardar Registro' : 'Actualizar Cambios'">Guardar</button>
+                            <a href="/gestion-oficinas/oficinas" class="btn btn-light px-4 border">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Confirmar Registro
+                            </button>
                         </div>
-
                     </form>
                 </div>
 
             </div>
         </div>
     </div>
-</div>
 
 <script src="https://jsdelivr.net"></script>
 </body>
