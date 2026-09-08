@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Servicio 1: La Base de Datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: ineco_postgres_db
+    environment:
+      POSTGRES_DB: gestion_oficinas_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tu_contraseña_aqui
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Servicio 2: Tu aplicación Spring Boot
+  app:
+    build: .
+    container_name: ineco_gestion_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      # Sobrescribimos la URL del application.yml para que apunte al contenedor "db" en vez de a localhost
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/gestion_oficinas_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=tu_contraseña_aqui
+
+volumes:
+  postgres_data:
