@@ -12,45 +12,38 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /**
-     * Define el algoritmo de cifrado para las contraseñas de los usuarios.
-     * BCrypt aplica un hash seguro e irreversible en la base de datos.
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Configuración principal del cortafuegos de la aplicación web.
-     * Define qué páginas son públicas y cuáles requieren login o roles específicos.
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Reglas de autorización en las rutas URL
             .authorizeHttpRequests(auth -> auth
-                // Permitir la carga de recursos estáticos (CSS, JS, Imágenes) sin autenticación
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                // Restringir la gestión de usuarios exclusivamente al rol Administrador
+                // Permitir libre acceso a recursos estáticos e imágenes
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/error").permitAll()
+                // La gestión de usuarios requiere rol ADMIN
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                // El resto de la aplicación requiere que el usuario esté autenticado
+                // El resto de la aplicación requiere autenticación
                 .anyRequest().authenticated()
             )
-            // 2. Configuración del formulario de Login integrado con las plantillas HTML
             .formLogin(form -> form
-                .loginPage("/login") // Ruta de tu controlador que sirve la vista HTML de login
-                .defaultSuccessUrl("/oficinas", true) // Redirección tras iniciar sesión con éxito
+                .loginPage("/login")
+                .loginProcessingUrl("/login") // Fuerza la ruta de procesamiento estándar
+                .defaultSuccessUrl("/oficinas", true)
+                .failureUrl("/login?error") // Asegura el parámetro de error
                 .permitAll()
             )
-            // 3. Configuración del proceso de Logout (Cierre de sesión)
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout") // Redirección tras salir del sistema
+                .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .permitAll()
-            );
+            )
+            // Desactivamos temporalmente CSRF solo para facilitar las pruebas en Docker local
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }

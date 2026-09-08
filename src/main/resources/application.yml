@@ -7,7 +7,7 @@ spring:
   application:
     name: gestion-oficinas-java
 
-  # Configuración de la base de datos (Ejemplo con PostgreSQL)
+  # Configuración de la base de datos (PostgreSQL)
   datasource:
     url: jdbc:postgresql://localhost:5432/gestion_oficinas_db
     username: postgres
@@ -17,8 +17,9 @@ spring:
   # Configuración del motor de persistencia (Hibernate / JPA)
   jpa:
     hibernate:
-      ddl-auto: update # Sincroniza las tablas automáticamente basándose en las entidades Java
+      ddl-auto: validate # <-- Cambiado a validate para respetar los datos nativos de Docker
     show-sql: true     # Muestra las consultas SQL en la consola para depurar fallos
+    defer-datasource-initialization: true # <-- OBLIGATORIO: Fuerza a ejecutar import.sql tras crear las tablas
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
