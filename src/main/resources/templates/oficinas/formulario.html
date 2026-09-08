@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Oficina - Ineco</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        .navbar-ineco {
+            background-color: #0056b3;
+        }
+        .wrapper {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        .card-form {
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Barra de Navegación Superior (Idéntica para mantener consistencia) -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">ineco</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/oficinas}"><i class="bi bi-building"></i> Oficinas</a>
+                    </li>
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3" th:text="${#authentication.name}">Usuario</span>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Salir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido del Formulario -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <!-- Enlace para volver atrás -->
+                <a th:href="@{/oficinas}" class="btn btn-sm btn-link text-secondary mb-3 p-0 text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </a>
+
+                <div class="card card-form shadow-sm p-4 bg-white">
+                    <!-- Título dinámico según la operación -->
+                    <h3 class="fw-bold text-dark mb-1" th:text="${oficina.id == null} ? 'Registrar Nueva Oficina' : 'Modificar Oficina'">Formulario Oficina</h3>
+                    <p class="text-muted mb-4 text-sm">Introduzca los datos técnicos requeridos para la base de datos de infraestructuras.</p>
+
+                    <!-- Alerta de error en caso de validación fallida (ej. Nombre duplicado) -->
+                    <div th:if="${error}" class="alert alert-danger p-2 text-center text-sm mb-4" role="alert" th:text="${error}">
+                        Mensaje de error.
+                    </div>
+
+                    <!-- Formulario mapeado con el objeto del controlador -->
+                    <form th:action="@{/oficinas/guardar}" th:object="${oficina}" method="post">
+                        
+                        <!-- Campo oculto imprescindible para saber si estamos editando o creando -->
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="row">
+                            <!-- Código Interno -->
+                            <div class="col-md-4 mb-3">
+                                <label for="codigoOficina" class="form-label text-secondary fw-semibold">Código Interno</label>
+                                <input type="text" id="codigoOficina" th:field="*{codigoOficina}" class="form-control text-uppercase" placeholder="Ej: OFI-LUG" required>
+                            </div>
+                            
+                            <!-- Nombre de la Oficina -->
+                            <div class="col-md-8 mb-3">
+                                <label for="nombre" class="form-label text-secondary fw-semibold">Nombre de la Oficina</label>
+                                <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Ej: Delegación Provincial de Lugo" required>
+                            </div>
+                        </div>
+
+                        <!-- Ubicación / Dirección -->
+                        <div class="mb-4">
+                            <label for="ubicacion" class="form-label text-secondary fw-semibold">Ubicación / Región Terrenal</label>
+                            <input type="text" id="ubicacion" th:field="*{ubicacion}" class="form-control" placeholder="Ej: Plaza de la Xunta S/N, Galicia">
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                            <a th:href="@{/oficinas}" class="btn btn-light px-4">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-4" th:text="${oficina.id == null} ? 'Guardar Registro' : 'Actualizar Cambios'">Guardar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://jsdelivr.net"></script>
+</body>
+</html>
