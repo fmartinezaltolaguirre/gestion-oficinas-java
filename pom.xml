@@ -1,0 +1,19 @@
+<!-- Componente de seguridad corporativa y control de accesos -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</dependency>
+</dependency>
+
+<!-- SDK Oficial de Microsoft Graph para conectar con SharePoint -->
+<dependency>
+    <groupId>com.microsoft.graph</groupId>
+    <artifactId>microsoft-graph</artifactId>
+    <version>6.15.0</version> <!-- Versión estable para Java 17 -->
+</dependency>
+
+<!-- Proveedor de autenticación de Azure para Java (Token Oauth2) -->
+<dependency>
+    <groupId>com.azure</groupId>
+    <artifactId>azure-identity</artifactId>
+    <version>1.13.0</version>
+</dependency>
