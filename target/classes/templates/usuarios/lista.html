@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Usuarios - Ineco</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        .navbar-ineco {
+            background-color: #0056b3;
+        }
+        .wrapper {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Barra de Navegación Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">ineco</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/oficinas}"><i class="bi bi-building"></i> Oficinas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3" th:text="${#authentication.name}">Usuario</span>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Salir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">Panel de Personal Técnico</h2>
+                <p class="text-muted">Auditoría de credenciales, roles y asignaciones a oficinas de Ineco.</p>
+            </div>
+            <!-- Botón para registrar un nuevo operador -->
+            <a th:href="@{/usuarios/nuevo}" class="btn btn-primary shadow-sm">
+                <i class="bi bi-person-plus"></i> Dar de Alta Operador
+            </a>
+        </div>
+
+        <!-- Tabla de Usuarios -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">ID</th>
+                                <th>Nombre Completo</th>
+                                <th>Usuario de Red (Login)</th>
+                                <th>Oficina Adscrita</th>
+                                <th class="pe-4">Rol Asignado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- En caso de que no existan registros -->
+                            <tr th:if="${#lists.isEmpty(usuarios)}">
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    No hay técnicos de área dados de alta en el sistema.
+                                </td>
+                            </tr>
+                            <!-- Bucle dinámico de operarios -->
+                            <tr th:each="u : ${usuarios}">
+                                <td class="ps-4 text-secondary fw-bold" th:text="${u.id}">1</td>
+                                <td class="fw-semibold text-dark" th:text="${u.nombreCompleto}">Carlos Sainz</td>
+                                <td>
+                                    <code th:text="${u.username}">csainz@ineco.es</code>
+                                </td>
+                                <td>
+                                    <!-- Si el usuario tiene oficina asignada muestra el nombre, si no, indica Sin Asignar -->
+                                    <span th:text="${u.oficina != null} ? ${u.oficina.nombre} : 'Sin Oficina Asignada'" 
+                                          th:class="${u.oficina != null} ? 'text-dark' : 'text-muted italic'">
+                                        Oficina
+                                    </span>
+                                </td>
+                                <td class="pe-4">
+                                    <span th:text="${u.rol == 'ROLE_ADMIN'} ? 'Administrador' : 'Consultor Técnico'"
+                                          class="badge" 
+                                          th:classappend="${u.rol == 'ROLE_ADMIN'} ? 'bg-danger' : 'bg-success'">
+                                        Rol
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://jsdelivr.net"></script>
+</body>
+</html>

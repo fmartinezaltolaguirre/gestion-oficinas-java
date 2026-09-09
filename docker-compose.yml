@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # Servicio 1: La Base de Datos PostgreSQL
   db:
     image: postgres:15-alpine
     container_name: ineco_postgres_db
@@ -11,10 +10,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      # FUEZA A POSTGRES A CREAR LAS TABLAS Y EL USUARIO AL ARRANCAR
-      - ./src/main/resources/import.sql:/docker-entrypoint-initdb.d/import.sql
+      - postgres_data:/var/lib/postgresql/data # <-- DEJA SOLO ESTA LÍNEA DE VOLUMEN
 
+  # Servicio 2: Tu aplicación Spring Boot
   app:
     build: .
     container_name: ineco_gestion_app

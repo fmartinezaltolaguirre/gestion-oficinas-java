@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /gestion-oficinas
+
+spring:
+  application:
+    name: gestion-oficinas-java
+
+  # Configuración de la base de datos (PostgreSQL)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gestion_oficinas_db
+    username: postgres
+    password: tu_contraseña_aqui
+    driver-class-name: org.postgresql.Driver
+
+  # Configuración del motor de persistencia (Hibernate / JPA)
+  jpa:
+    hibernate:
+      ddl-auto: validate # <-- Cambiado a validate para respetar los datos nativos de Docker
+    show-sql: true     # Muestra las consultas SQL en la consola para depurar fallos
+    defer-datasource-initialization: true # <-- OBLIGATORIO: Fuerza a ejecutar import.sql tras crear las tablas
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # Configuración del motor de vistas HTML (Interfaz gráfica de usuario)
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false # Desactivado en desarrollo para ver los cambios visuales al instante
+
+# Credenciales para el acceso automatizado al SharePoint Corporativo
+azure:
+  activedirectory:
+    tenant-id: "tu-id-de-inquilino-azure-entra"
+    client-id: "tu-id-de-aplicacion-cliente"
+    client-secret: "tu-clave-secreta-de-cliente-registrada"
+
+# Identificador del sitio de SharePoint asignado a la oficina técnica
+sharepoint:
+  site-id: "://sharepoint.com,id-del-sitio,id-de-la-lista"
