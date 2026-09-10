@@ -5,16 +5,19 @@ import com.ineco.model.Usuario;
 import com.ineco.model.Proyecto;
 import com.ineco.model.Propietario;
 import com.ineco.model.Finca;
+import com.ineco.model.Acta;
 import com.ineco.repository.OficinaRepository;
 import com.ineco.repository.UsuarioRepository;
 import com.ineco.repository.ProyectoRepository;
 import com.ineco.repository.PropietarioRepository;
 import com.ineco.repository.FincaRepository;
+import com.ineco.repository.ActaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.time.LocalDate;
 
 @SpringBootApplication(scanBasePackages = "com.ineco")
 public class GestionOficinasApplication {
@@ -30,6 +33,7 @@ public class GestionOficinasApplication {
             ProyectoRepository proyectoRepository,
             PropietarioRepository propietarioRepository,
             FincaRepository fincaRepository,
+            ActaRepository actaRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("****************************************************************");
@@ -52,7 +56,6 @@ public class GestionOficinasApplication {
                 admin.setRol("ROLE_ADMIN");
                 admin.setOficina(oficinaSede);
                 usuarioRepository.save(admin);
-                System.out.println("[ÉXITO] USUARIO 'admin' LISTO");
             }
 
             // 3. Crear proyecto de prueba
@@ -64,7 +67,6 @@ public class GestionOficinasApplication {
                 exp.setTipoInfraestructura("Ferroviaria");
                 exp.setOficina(oficinaSede);
                 exp = proyectoRepository.save(exp);
-                System.out.println("[ÉXITO] EXPEDIENTE 'EXP-2026-001' CARGADO");
             } else {
                 exp = proyectoRepository.findAll().get(0);
             }
@@ -79,14 +81,14 @@ public class GestionOficinasApplication {
                 prop.setMunicipio("Madrid");
                 prop.setTelefono("915000000");
                 prop = propietarioRepository.save(prop);
-                System.out.println("[ÉXITO] PROPIETARIO AFECTADO CARGADO");
             } else {
                 prop = propietarioRepository.findAll().get(0);
             }
 
-            // 5. Crear predio / finca afectada vinculada a ambos
+            // 5. Crear parcela afectada vinculada
+            Finca f = null;
             if (fincaRepository.count() == 0) {
-                Finca f = new Finca();
+                f = new Finca();
                 f.setNumeroExpedienteFinca("LU-LUG-015");
                 f.setPoligono(14);
                 f.setParcela(245);
@@ -94,12 +96,26 @@ public class GestionOficinasApplication {
                 f.setTipoCultivo("Rústico Prado");
                 f.setProyecto(exp);
                 f.setPropietario(prop);
-                fincaRepository.save(f);
-                System.out.println("[ÉXITO] PREDIO / PARCELA AFECTADA 'LU-LUG-015' INYECTADO CON ÉXITO");
+                f = fincaRepository.save(f);
+            } else {
+                f = fincaRepository.findAll().get(0);
+            }
+
+            // 6. Crear acta jurídica vinculada a la parcela
+            if (actaRepository.count() == 0) {
+                Acta a = new Acta();
+                a.setNumeroActa("ACT-2026-089");
+                a.setFechaActaPrevia(LocalDate.of(2026, 3, 15));
+                a.setFechaActaOcupacion(LocalDate.of(2026, 6, 20));
+                a.setImporteJustiprecio(18500.75);
+                a.setEstadoPago("PAGADO");
+                a.setFinca(f); // Vinculación OneToOne
+                actaRepository.save(a);
+                System.out.println("[ÉXITO] HITO JURÍDICO 'ACT-2026-089' INYECTADO CORRECTAMENTE");
             }
             
             System.out.println("****************************************************************");
-            System.out.println("[INFO] Modificaciones procesadas con éxito.");
+            System.out.println("[INFO] Datos cargados con éxito. Ecosistema listo.");
             System.out.println("****************************************************************");
         };
     }
