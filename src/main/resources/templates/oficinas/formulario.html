@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Oficina - Ineco</title>
+    <title>Nuevo Proyecto - Ineco</title>
     
-    <!-- BLOQUE DE ESTILOS ELEGANTES INTEGRADO (Sin necesidad de internet ni descargas) -->
+    <!-- BLOQUE DE ESTILOS PREMIUM INTEGRADO (Independiente de Internet) -->
     <style>
         :root {
             --ineco-blue: #0056b3;
@@ -19,9 +19,13 @@
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: var(--dark-elegant);
+        }
+
+        .main-wrapper {
+            padding: 40px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,7 +33,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
         }
 
         .card-form {
@@ -40,6 +44,7 @@
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
             padding: 40px;
+            box-sizing: border-box;
         }
 
         .brand-header {
@@ -69,7 +74,7 @@
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-label-elegant {
@@ -81,7 +86,7 @@
             letter-spacing: 0.3px;
         }
 
-        .form-control-elegant {
+        .form-control-elegant, .form-select-elegant {
             background-color: rgba(248, 250, 252, 0.8);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -93,7 +98,17 @@
             transition: all 0.25s ease;
         }
 
-        .form-control-elegant:focus {
+        .form-select-elegant {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://w3.org' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23344155' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3cvg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        .form-control-elegant:focus, .form-select-elegant:focus {
             background-color: #ffffff;
             border-color: var(--ineco-blue);
             box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1);
@@ -161,72 +176,82 @@
 </head>
 <body>
 
-<div class="container">
-    
-    <!-- Enlace Volver atrás -->
-    <a href="/gestion-oficinas/oficinas" class="back-link">
-        ← Volver al listado corporativo
-    </a>
+    <!-- 1. Acoplamos nuestra barra de navegación común e iluminamos la pestaña 'proyectos' -->
+    <div th:replace="~{fragments/navbar :: menuCorporativo('proyectos')}"></div>
 
-    <div class="card card-form">
-        
-        <!-- Cabecera Corporativa con Imagen Local -->
-        <div class="brand-header">
-            <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
-            <div class="title-area">
-                <h4 th:text="${oficina.id == null} ? 'Registrar Oficina Técnica' : 'Modificar Parámetros de Sede'">Formulario</h4>
-                <small>Mapeo de delegaciones territoriales e infraestructuras locales</small>
+    <!-- 2. Cuerpo del Formulario de Expedientes -->
+    <div class="main-wrapper">
+        <div class="container">
+            
+            <a href="/gestion-oficinas/proyectos" class="back-link">
+                ← Volver a la cartera de proyectos
+            </a>
+
+            <div class="card card-form">
+                
+                <div class="brand-header">
+                    <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
+                    <div class="title-area">
+                        <h4>Apertura de Expediente Técnico</h4>
+                        <small>Alta de proyectos de obra, tipología de infraestructuras y asignación de tutela</small>
+                    </div>
+                </div>
+
+                <form th:action="@{/proyectos/guardar}" th:object="${proyecto}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    
+                    <div class="form-group">
+                        <label for="codigoExpediente" class="form-label-elegant">Código de Expediente</label>
+                        <input type="text" 
+                               id="codigoExpediente" 
+                               th:field="*{codigoExpediente}" 
+                               class="form-control-elegant" 
+                               style="text-transform: uppercase;"
+                               placeholder="Ej: EXP-2026-004" 
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre" class="form-label-elegant">Nombre del Proyecto / Denominación de Obra</label>
+                        <input type="text" 
+                               id="nombre" 
+                               th:field="*{nombre}" 
+                               class="form-control-elegant" 
+                               placeholder="Ej: Desdoblamiento de Vía y Electrificación Tramo X" 
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoInfraestructura" class="form-label-elegant">Tipología de Infraestructura</label>
+                        <select id="tipoInfraestructura" th:field="*{tipoInfraestructura}" class="form-select-elegant" required>
+                            <option value="Ferroviaria">Ferroviaria (Vías, Subestaciones, Alta Velocidad)</option>
+                            <option value="Carreteras">Carreteras (Autovías, Firmes, Enlaces)</option>
+                            <option value="Aeropuertos">Aeropuertos (Pistas, Terminales, Navegación Aérea)</option>
+                            <option value="Puertos">Puertos y Costas</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oficina" class="form-label-elegant">Oficina Técnica Gestora (Sede)</label>
+                        <select id="oficina" th:field="*{oficina}" class="form-select-elegant" required>
+                            <option value="" disabled selected>Seleccione la delegación a cargo...</option>
+                            <!-- Carga dinámica del listado de sedes territoriales -->
+                            <option th:each="of : ${oficinas}" th:value="${of.id}" th:text="${of.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <div class="btn-container">
+                        <a href="/gestion-oficinas/proyectos" class="btn btn-elegant btn-light-elegant">Cancelar</a>
+                        <button type="submit" class="btn btn-elegant btn-dark-elegant">
+                            Dar de Alta Expediente
+                        </button>
+                    </div>
+                </form>
+
             </div>
         </div>
-
-        <!-- Formulario Técnico -->
-        <form th:action="@{/oficinas/guardar}" th:object="${oficina}" method="post">
-            
-            <!-- Identificador Oculto -->
-            <input type="hidden" th:field="*{id}">
-            
-            <div class="form-group">
-                <label for="codigoOficina" class="form-label-elegant">Código Interno de Sede</label>
-                <input type="text" 
-                       id="codigoOficina" 
-                       th:field="*{codigoOficina}" 
-                       class="form-control-elegant" 
-                       style="text-transform: uppercase;"
-                       placeholder="Ej: OFI-LUG" 
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="nombre" class="form-label-elegant">Nombre Oficial de la Oficina</label>
-                <input type="text" 
-                       id="nombre" 
-                       th:field="*{nombre}" 
-                       class="form-control-elegant" 
-                       placeholder="Ej: Delegación Provincial de Lugo" 
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="ubicacion" class="form-label-elegant">Ubicación / Región Terrenal</label>
-                <input type="text" 
-                       id="ubicacion" 
-                       th:field="*{ubicacion}" 
-                       class="form-control-elegant" 
-                       placeholder="Ej: Plaza de la Xunta S/N, Galicia">
-            </div>
-
-            <!-- Botones de Acción Estilizados -->
-            <div class="btn-container">
-                <a href="/gestion-oficinas/oficinas" class="btn btn-elegant btn-light-elegant">Cancelar</a>
-                <button type="submit" class="btn btn-elegant btn-dark-elegant" 
-                        th:text="${oficina.id == null} ? 'Confirmar Registro' : 'Actualizar Cambios'">
-                    Guardar
-                </button>
-            </div>
-            
-        </form>
     </div>
-</div>
 
 </body>
 </html>
+

@@ -2,8 +2,10 @@ package com.ineco;
 
 import com.ineco.model.Oficina;
 import com.ineco.model.Usuario;
+import com.ineco.model.Proyecto;
 import com.ineco.repository.OficinaRepository;
 import com.ineco.repository.UsuarioRepository;
+import com.ineco.repository.ProyectoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,12 +20,14 @@ public class GestionOficinasApplication {
     }
 
     /**
-     * Inyecta de forma directa los datos en la base de datos H2 en memoria RAM.
+     * Inyecta de forma directa los datos estructurales en la base de datos H2 en memoria RAM
+     * al arrancar el servidor web local.
      */
     @Bean
     CommandLineRunner inicializarDatosDePrueba(
             OficinaRepository oficinaRepository, 
             UsuarioRepository usuarioRepository, 
+            ProyectoRepository proyectoRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("****************************************************************");
@@ -33,6 +37,9 @@ public class GestionOficinasApplication {
             // 1. Crear oficina de prueba si la base de datos en RAM está vacía
             Oficina oficinaSede = oficinaRepository.findByCodigoOficina("OFI-MDR")
                 .orElseGet(() -> oficinaRepository.save(new Oficina("Sede Central Madrid", "Paseo de la Castellana 45", "OFI-MDR")));
+
+            oficinaRepository.findByCodigoOficina("OFI-LUG")
+                .orElseGet(() -> oficinaRepository.save(new Oficina("Delegación Galicia - Lugo", "Plaza de la Xunta S/N, Galicia", "OFI-LUG")));
 
             // 2. Crear administrador de prueba
             if (usuarioRepository.findByUsername("admin").isEmpty()) {
@@ -44,10 +51,24 @@ public class GestionOficinasApplication {
                 admin.setOficina(oficinaSede);
                 
                 usuarioRepository.save(admin);
-                System.out.println("****************************************************************");
                 System.out.println("[ÉXITO] USUARIO 'admin' CON CLAVE 'admin123' DISPONIBLE EN LOG-IN");
-                System.out.println("****************************************************************");
             }
+
+            // 3. Crear proyecto de prueba de infraestructuras
+            if (proyectoRepository.count() == 0) {
+                Proyecto exp = new Proyecto();
+                exp.setCodigoExpediente("EXP-2026-001");
+                exp.setNombre("Modernización de Infraestructura de Red - Eje Atlántico");
+                exp.setTipoInfraestructura("Ferroviaria");
+                exp.setOficina(oficinaSede); // Vinculado a la Sede Central
+                
+                proyectoRepository.save(exp);
+                System.out.println("[ÉXITO] EXPEDIENTE TÉCNICO 'EXP-2026-001' CARGADO CORRECTAMENTE");
+            }
+            
+            System.out.println("****************************************************************");
+            System.out.println("[INFO] Datos cargados con éxito. Servidor listo para operar.");
+            System.out.println("****************************************************************");
         };
     }
 }

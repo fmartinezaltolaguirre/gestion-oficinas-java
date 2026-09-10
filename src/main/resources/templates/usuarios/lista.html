@@ -227,17 +227,8 @@
 <body>
 
     <!-- Menú Superior Corporativo Sincronizado -->
-    <div class="navbar-ineco">
-        <div style="display: flex; align-items: center;">
-            <a class="navbar-brand-elegant" href="/gestion-oficinas/oficinas">
-                <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
-                <span>| Panel Técnico</span>
-            </a>
-            <div class="nav-links">
-                <a href="/gestion-oficinas/oficinas">Oficinas</a>
-                <a href="/gestion-oficinas/usuarios" class="active">Usuarios</a>
-            </div>
-        </div>
+<div th:replace="~{fragments/navbar :: menuCorporativo('oficinas')}"></div>
+
         <div class="user-zone">
             <span class="username-text" th:text="${#authentication.name}">Usuario</span>
             <form th:action="@{/logout}" method="post" style="margin: 0;">

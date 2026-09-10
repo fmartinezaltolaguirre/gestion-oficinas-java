@@ -1,3 +1,4 @@
+com/ineco/repository/ProyectoRepository.class
 com/ineco/repository/UsuarioRepository.class
 com/ineco/controller/OficinaController.class
 com/ineco/controller/LoginController.class
@@ -6,6 +7,8 @@ com/ineco/repository/OficinaRepository.class
 com/ineco/service/SharePointService.class
 com/ineco/config/SecurityConfig.class
 com/ineco/GestionOficinasApplication.class
+com/ineco/controller/ProyectoController.class
+com/ineco/model/Proyecto.class
 com/ineco/model/Oficina.class
 com/ineco/service/OficinaService.class
 com/ineco/service/UsuarioService.class
