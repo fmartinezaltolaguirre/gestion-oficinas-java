@@ -103,12 +103,13 @@
                     <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
                     <span>| Panel Técnico</span>
                 </a>
-                <div class="nav-links-container">
-                    <!-- Aplicamos la clase genérica y la condicional 'active' -->
-                    <a href="/gestion-oficinas/oficinas" class="nav-link-item" th:classappend="${paginaActiva == 'oficinas'} ? 'active' : ''">Oficinas</a>
-                    <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
-                    <a href="/gestion-oficinas/proyectos" class="nav-link-item" th:classappend="${paginaActiva == 'proyectos'} ? 'active' : ''">Proyectos</a>
-                </div>
+<div class="nav-links-container">
+    <a href="/gestion-oficinas/oficinas" class="nav-link-item" th:classappend="${paginaActiva == 'oficinas'} ? 'active' : ''">Oficinas</a>
+    <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
+    <a href="/gestion-oficinas/proyectos" class="nav-link-item" th:classappend="${paginaActiva == 'proyectos'} ? 'active' : ''">Proyectos</a>
+    <!-- NUEVA PESTAÑA AÑADIDA -->
+    <a href="/gestion-oficinas/propietarios" class="nav-link-item" th:classappend="${paginaActiva == 'propietarios'} ? 'active' : ''">Afectados</a>
+</div>
             </div>
             <div class="user-zone">
                 <span class="username-text" th:text="${#authentication.name}">Usuario</span>
