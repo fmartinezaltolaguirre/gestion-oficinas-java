@@ -5,13 +5,16 @@ com/ineco/controller/LoginController.class
 com/ineco/model/Usuario.class
 com/ineco/repository/OficinaRepository.class
 com/ineco/service/SharePointService.class
+com/ineco/model/Finca.class
 com/ineco/config/SecurityConfig.class
 com/ineco/GestionOficinasApplication.class
+com/ineco/repository/FincaRepository.class
 com/ineco/controller/ProyectoController.class
 com/ineco/controller/PropietarioController.class
 com/ineco/model/Proyecto.class
 com/ineco/model/Oficina.class
 com/ineco/service/OficinaService.class
+com/ineco/controller/FincaController.class
 com/ineco/model/Propietario.class
 com/ineco/repository/PropietarioRepository.class
 com/ineco/service/UsuarioService.class

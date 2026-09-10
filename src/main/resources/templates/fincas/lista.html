@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Fincas - Ineco</title>
+    
+    <!-- BLOQUE DE ESTILOS PREMIUM INTEGRADO -->
+    <style>
+        :root {
+            --ineco-blue: #0056b3;
+            --dark-elegant: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --badge-finca: #f0fdf4;
+            --badge-finca-text: #166534;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--dark-elegant);
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-area h3 {
+            margin: 0 0 6px 0;
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header-area p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .btn-add {
+            background-color: var(--ineco-blue);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #004085;
+            box-shadow: 0 6px 16px rgba(0, 86, 179, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .card-table {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.02);
+            overflow: hidden;
+        }
+
+        .elegant-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .elegant-table th {
+            background-color: #f8fafc;
+            padding: 16px 24px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .elegant-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .elegant-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .elegant-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .code-inline {
+            font-family: monospace;
+            background-color: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: #334155;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+        }
+
+        .badge-cultivo {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            background-color: var(--badge-finca);
+            color: var(--badge-finca-text);
+            border: 1px solid #dcfce7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Enlazamos la barra común iluminando la pestaña 'fincas' -->
+    <div th:replace="~{fragments/navbar :: menuCorporativo('fincas')}"></div>
+
+    <!-- 2. Tabla de Datos -->
+    <div class="main-container">
+        <div class="header-area">
+            <div>
+                <h3>Registro de Fincas y Parcelas Afectadas</h3>
+                <p>Módulo catastral de bienes raíces afectados por las trazas, superficies y asignación de titularidad.</p>
+            </div>
+            <a th:href="@{/fincas/nueva}" class="btn-add">
+                + Inventariar Parcela
+            </a>
+        </div>
+
+        <div class="card-table">
+            <table class="elegant-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 150px;">Nº Expediente</th>
+                        <th style="width: 110px;">Polígono</th>
+                        <th style="width: 110px;">Parcela</th>
+                        <th>Superficie Afectada</th>
+                        <th>Aprovechamiento / Cultivo</th>
+                        <th>Proyecto Adscrito</th>
+                        <th>Propietario / Titular</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(fincas)}">
+                        <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
+                            No hay parcelas registradas en la memoria de la traza.
+                        </td>
+                    </tr>
+                    <tr th:each="f : ${fincas}">
+                        <td style="font-weight: 700; color: #94a3b8;" th:text="${f.id}">1</td>
+                        <td><span class="code-inline" th:text="${f.numeroExpedienteFinca}">LU-LUG-015</span></td>
+                        <td style="font-weight: 600;" th:text="${f.poligono}">14</td>
+                        <td style="font-weight: 600;" th:text="${f.parcela}">245</td>
+                        <td style="font-weight: 600; color: #0284c7;" th:text="${f.superficieAfectada} + ' m²'">1240.50 m²</td>
+                        <td><span class="badge-cultivo" th:text="${f.tipoCultivo}">Rústico Prado</span></td>
+                        <td style="color: #475569;" th:text="${f.proyecto != null} ? f.proyecto.codigoExpediente : 'Sin Obra'">EXP-2026</td>
+                        <td style="color: #1e293b; font-weight: 500;" th:text="${f.propietario != null} ? f.propietario.nombreCompleto : 'Desconocido'">Titular</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

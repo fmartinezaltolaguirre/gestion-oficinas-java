@@ -1,5 +1,6 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/service/OficinaService.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/PropietarioController.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/FincaController.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/OficinaRepository.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/util/GraphClient.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/ProyectoRepository.java
@@ -17,11 +18,13 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/OficinaController.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/LoginServlet.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/UsuarioController.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Finca.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Perfil.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/OficinaServlet.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/config/SecurityConfig.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/GestionOficinasApplication.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/filter/AuthFilter.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/ErrorServlet.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/FincaRepository.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/UsuarioServlet.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Proyecto.java
