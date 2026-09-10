@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alta de Personal Técnico - Ineco</title>
+    <title>Firmar Acta - Ineco</title>
     <style>
-        :root { --ineco-blue: #0056b3; --dark-elegant: #1e293b; --text-muted: #64748b; --bg-light: #f8fafc; --border-color: #cbd5e1; --success-color: #10b981; }
+        :root { --ineco-blue: #0056b3; --dark-elegant: #1e293b; --text-muted: #64748b; --bg-light: #f8fafc; --border-color: #cbd5e1; }
         body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--dark-elegant); }
         .main-wrapper { padding: 40px 20px; display: flex; align-items: center; justify-content: center; }
         .container { width: 100%; max-width: 650px; }
@@ -25,64 +25,66 @@
         .btn-elegant { font-weight: 500; font-size: 0.95rem; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; }
         .btn-light-elegant { background-color: #f1f5f9; color: var(--dark-elegant); border: 1px solid #e2e8f0; }
         .btn-light-elegant:hover { background-color: #e2e8f0; }
-        .btn-success-elegant { background-color: var(--success-color); color: #ffffff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
-        .btn-success-elegant:hover { background-color: #059669; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25); transform: translateY(-1px); }
+        .btn-dark-elegant { background-color: var(--dark-elegant); color: #ffffff; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15); }
+        .btn-dark-elegant:hover { background-color: #0f172a; box-shadow: 0 6px 20px rgba(30, 41, 59, 0.25); transform: translateY(-1px); }
         .back-link { display: inline-flex; align-items: center; color: var(--text-muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 16px; transition: color 0.2s ease; }
         .back-link:hover { color: var(--ineco-blue); }
         @media (max-width: 576px) { .row-grid { flex-direction: column; gap: 0; } }
     </style>
 </head>
 <body>
-    <!-- Enlazamos la barra común compartida iluminando la pestaña 'usuarios' -->
-    <div th:replace="~{fragments/navbar :: menuCorporativo('usuarios')}"></div>
+    <div th:replace="~{fragments/navbar :: menuCorporativo('actas')}"></div>
     <div class="main-wrapper">
         <div class="container">
-            <a href="/gestion-oficinas/usuarios" class="back-link">← Volver al panel de personal</a>
+            <a href="/gestion-oficinas/actas" class="back-link">← Volver al censo de actas</a>
             <div class="card card-form">
                 <div class="brand-header">
                     <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
                     <div class="title-area">
-                        <h4>Alta de Personal Técnico</h4>
-                        <small>Registro de credenciales para el control de accesos e informes de red</small>
+                        <h4>Ficha de Hito Jurídico / Acta</h4>
+                        <small>Gestión de actas previas, de ocupación y control financiero del Justiprecio</small>
                     </div>
                 </div>
-                <div th:if="${error}" style="background-color: #fef2f2; border: 1px solid #fee2e2; color: #991b1b; padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 20px;" th:text="${error}">Error</div>
-                
-                <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
+                <form th:action="@{/actas/guardar}" th:object="${acta}" method="post">
                     <input type="hidden" th:field="*{id}">
+                    <div class="row-grid">
+                        <div class="col-half form-group">
+                            <label class="form-label-elegant">Número de Acta Oficial</label>
+                            <input type="text" th:field="*{numeroActa}" class="form-control-elegant" style="text-transform: uppercase;" placeholder="Ej: ACT-2026-089" required>
+                        </div>
+                        <div class="col-half form-group">
+                            <label class="form-label-elegant">Estado de Pago</label>
+                            <select th:field="*{estadoPago}" class="form-select-elegant" required>
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="FISCALIZACIÓN">FISCALIZACIÓN</option>
+                                <option value="PAGADO">PAGADO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row-grid">
+                        <div class="col-half form-group">
+                            <label class="form-label-elegant">Fecha de Acta Previa</label>
+                            <input type="date" th:field="*{fechaActaPrevia}" class="form-control-elegant" required>
+                        </div>
+                        <div class="col-half form-group">
+                            <label class="form-label-elegant">Fecha de Ocupación</label>
+                            <input type="date" th:field="*{fechaActaOcupacion}" class="form-control-elegant">
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="nombreCompleto" class="form-label-elegant">Nombre y Apellidos</label>
-                        <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" class="form-control-elegant" placeholder="Ej: Juan Pérez Expósito" required>
+                        <label class="form-label-elegant">Importe del Justiprecio (€)</label>
+                        <input type="number" step="0.01" th:field="*{importeJustiprecio}" class="form-control-elegant" placeholder="Ej: 18500.75" required>
                     </div>
-                    <div class="row-grid">
-                        <div class="col-half form-group">
-                            <label for="username" class="form-label-elegant">Usuario de Red (Login)</label>
-                            <input type="text" id="username" th:field="*{username}" class="form-control-elegant" placeholder="ej: jpexposito" required>
-                        </div>
-                        <div class="col-half form-group">
-                            <label for="password" class="form-label-elegant">Contraseña de Acceso</label>
-                            <input type="password" id="password" th:field="*{password}" class="form-control-elegant" placeholder="••••••••" required>
-                        </div>
-                    </div>
-                    <div class="row-grid">
-                        <div class="col-half form-group">
-                            <label for="oficina" class="form-label-elegant">Sede Técnico-Administrativa</label>
-                            <select id="oficina" th:field="*{oficina}" class="form-select-elegant" required>
-                                <option value="" disabled selected>Seleccione destino...</option>
-                                <option th:each="of : ${oficinas}" th:value="${of.id}" th:text="${of.nombre}"></option>
-                            </select>
-                        </div>
-                        <div class="col-half form-group">
-                            <label for="rol" class="form-label-elegant">Rol de Permisos</label>
-                            <select id="rol" th:field="*{rol}" class="form-select-elegant" required>
-                                <option value="ROLE_CONSULTOR">Consultor Área (Lectura/Escritura)</option>
-                                <option value="ROLE_ADMIN">Administrador Ineco (Control Total)</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label-elegant">Finca / Parcela Afectada Asociada</label>
+                        <select th:field="*{finca}" class="form-select-elegant" required>
+                            <option value="" disabled selected>Asigne la parcela catastral...</option>
+                            <option th:each="fi : ${fincas}" th:value="${fi.id}" th:text="${fi.numeroExpedienteFinca} + ' (Pol: ' + ${fi.poligono} + ', Par: ' + ${fi.parcela} + ')'"></option>
+                        </select>
                     </div>
                     <div class="btn-container">
-                        <a href="/gestion-oficinas/usuarios" class="btn btn-elegant btn-light-elegant">Cancelar</a>
-                        <button type="submit" class="btn btn-elegant btn-success-elegant">Habilitar Cuenta</button>
+                        <a href="/gestion-oficinas/actas" class="btn btn-elegant btn-light-elegant">Cancelar</a>
+                        <button type="submit" class="btn btn-elegant btn-dark-elegant">Confirmar Acta Legal</button>
                     </div>
                 </form>
             </div>

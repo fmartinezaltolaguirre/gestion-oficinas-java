@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Actas - Ineco</title>
+    <title>Panel de Oficinas - Ineco</title>
     <style>
         :root { --ineco-blue: #0056b3; --dark-elegant: #1e293b; --text-muted: #64748b; --bg-light: #f8fafc; --border-color: #e2e8f0; }
         body { background-color: var(--bg-light); margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--dark-elegant); }
@@ -19,50 +19,52 @@
         .elegant-table td { padding: 18px 24px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
         .elegant-table tr:last-child td { border-bottom: none; }
         .elegant-table tr:hover td { background-color: #f8fafc; }
-        .code-inline { font-family: monospace; background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; color: #334155; font-size: 0.85rem; font-weight: 600; border: 1px solid #cbd5e1; }
-        .badge-pago { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; display: inline-block; background-color: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+        .badge-code { background-color: #f1f5f9; color: var(--dark-elegant); border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; font-weight: 600; }
+        .action-link { text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-left: 12px; transition: color 0.2s; }
+        .action-edit { color: var(--text-muted); }
+        .action-edit:hover { color: var(--ineco-blue); }
+        .action-delete { color: #ef4444; }
+        .action-delete:hover { color: #b91c1c; }
     </style>
 </head>
 <body>
-    <div th:replace="~{fragments/navbar :: menuCorporativo('actas')}"></div>
+    <div th:replace="~{fragments/navbar :: menuCorporativo('oficinas')}"></div>
     <div class="main-container">
         <div class="header-area">
             <div>
-                <h3>Control de Actas de Expropiación</h3>
-                <p>Módulo de seguimiento legal e importes financieros de Justiprecio para las parcelas afectadas.</p>
+                <h3>Gestión de Oficinas Técnicas</h3>
+                <p>Módulo centralizado de delegaciones territoriales e infraestructuras locales.</p>
             </div>
-            <a th:href="@{/actas/nueva}" class="btn-add">+ Firmar Acta</a>
+            <a th:href="@{/oficinas/nueva}" class="btn-add">
+                + Registrar Oficina
+            </a>
         </div>
 
         <div class="card-table">
             <table class="elegant-table">
                 <thead>
                     <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th style="width: 160px;">Nº Acta Oficial</th>
-                        <th>Fecha Acta Previa</th>
-                        <th>Fecha Ocupación</th>
-                        <th>Importe Justiprecio</th>
-                        <th>Estado de Pago</th>
-                        <th>Finca Vinculada</th>
+                        <th style="width: 80px;">ID</th>
+                        <th style="width: 150px;">Código Interno</th>
+                        <th>Nombre de la Oficina</th>
+                        <th>Ubicación / Región</th>
+                        <th style="text-align: right;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:if="${#lists.isEmpty(actas)}">
-                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
-                            No hay hitos jurídicos ni actas registradas en el sistema.
+                    <tr th:if="${#lists.isEmpty(oficinas)}">
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
+                            No hay ninguna oficina técnica dada de alta en el sistema H2.
                         </td>
                     </tr>
-                    <tr th:each="a : ${actas}">
-                        <td style="font-weight: 700; color: #94a3b8;" th:text="${a.id}">1</td>
-                        <td><span class="code-inline" th:text="${a.numeroActa}">ACT-2026-089</span></td>
-                        <td style="color: #475569;" th:text="${a.fechaActaPrevia}">15/03/2026</td>
-                        <td style="color: #475569;" th:text="${a.fechaActaOcupacion}">20/06/2026</td>
-                        <td style="font-weight: 700; color: #16a34a;" th:text="${a.importeJustiprecio} + ' €'">18500</td>
-                        <td><span class="badge-pago" th:text="${a.estadoPago}">PAGADO</span></td>
-                        <td>
-                            <span style="color: #1e293b; font-weight: 500;" th:if="${a.finca != null}" th:text="${a.finca.numeroExpedienteFinca}">LU-LUG-015</span>
-                            <span style="color: #94a3b8; font-style: italic;" th:if="${a.finca == null}">Sin Finca</span>
+                    <tr th:each="o : ${oficinas}">
+                        <td style="font-weight: 700; color: #94a3b8;" th:text="${o.id}">1</td>
+                        <td><span class="badge-code" th:text="${o.codigoOficina}">OFI-MDR</span></td>
+                        <td style="font-weight: 600;" th:text="${o.nombre}">Sede Central Madrid</td>
+                        <td style="color: #475569;" th:text="${o.ubicacion}">Paseo de la Castellana 45</td>
+                        <td style="text-align: right;">
+                            <a th:href="@{/oficinas/editar/{id}(id=${o.id})}" class="action-link action-edit">Editar</a>
+                            <a th:href="@{/oficinas/eliminar/{id}(id=${o.id})}" class="action-link action-delete" onclick="return confirm('¿Seguro que deseas eliminar esta delegación?');">Eliminar</a>
                         </td>
                     </tr>
                 </tbody>
