@@ -1,3 +1,25 @@
+# 🚄 Sistema de Gestión de Oficinas Técnicas e Inventario Catastral - Ineco
+
+Este ecosistema web corporativo de alto rendimiento representa la modernización integral y migración de la antigua infraestructura de datos basada en **Microsoft Access** hacia una arquitectura empresarial distribuida y segura. El sistema está diseñado específicamente para la supervisión de delegaciones territoriales, control de personal, trazas ferroviarias, censo catastral de expropiaciones e hitos jurídicos.
+
+## 🛠️ Stack Tecnológico Corporativo
+* **Backend Core:** Java 17 / Spring Boot 3.2.4
+* **Seguridad y Accesos:** Spring Security 6 (Cifrado BCrypt de credenciales)
+* **Motor de Plantillas:** Thymeleaf 3 (Arquitectura fragmentada reutilizable)
+* **Persistencia y Datos:** Spring Data JPA / Hibernate 
+* **Base de Datos Local:** H2 Database (Inyección directa controlada en memoria RAM)
+* **Gestor Documental Cloud:** Conector Oficial SDK Microsoft Graph (SharePoint Online / Microsoft 365)
+* **Diseño e Interfaz:** CSS3 Autónomo Avanzado (Efecto Glassmorphism & Branding Ineco)
+
+## 📦 Arquitectura del Modelo Relacional Migrado
+El corazón de la base de datos se compone de 6 entidades perfectamente relacionadas y normalizadas mediante JPA:
+1. **Oficina (`Oficina`):** Delegación territorial que tutela los proyectos (Sedes Madrid, Lugo, etc.).
+2. **Usuario (`Usuario`):** Personal técnico adscrito a una sede con control de roles (`ADMIN` / `CONSULTOR`).
+3. **Proyecto (`Proyecto`):** Expediente de infraestructura de obra pública (vías ferroviarias, carreteras, aeropuertos).
+4. **Propietario (`Propietario`):** Censo de titulares legales y razones sociales afectados por las trazas.
+5. **Finca (`Finca`):** Inventario de predios y parcelas afectadas (Polígono, Parcela, Superficie expropiada en m²).
+6. **Acta (`Acta`):** Hito técnico-jurídico y control financiero del Justiprecio (`OneToOne` con Finca).
+7. **Alerta (`Alerta`):** Calendario automatizado de control de plazos legales y vencimientos de alegaciones.
 
 ## 🚀 Capacidades Especiales de la Aplicación
 
