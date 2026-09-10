@@ -6,12 +6,14 @@ import com.ineco.model.Proyecto;
 import com.ineco.model.Propietario;
 import com.ineco.model.Finca;
 import com.ineco.model.Acta;
+import com.ineco.model.Alerta;
 import com.ineco.repository.OficinaRepository;
 import com.ineco.repository.UsuarioRepository;
 import com.ineco.repository.ProyectoRepository;
 import com.ineco.repository.PropietarioRepository;
 import com.ineco.repository.FincaRepository;
 import com.ineco.repository.ActaRepository;
+import com.ineco.repository.AlertaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +36,7 @@ public class GestionOficinasApplication {
             PropietarioRepository propietarioRepository,
             FincaRepository fincaRepository,
             ActaRepository actaRepository,
+            AlertaRepository alertaRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("****************************************************************");
@@ -101,7 +104,7 @@ public class GestionOficinasApplication {
                 f = fincaRepository.findAll().get(0);
             }
 
-            // 6. Crear acta jurídica vinculada a la parcela
+            // 6. Crear acta jurídica vinculada
             if (actaRepository.count() == 0) {
                 Acta a = new Acta();
                 a.setNumeroActa("ACT-2026-089");
@@ -109,13 +112,25 @@ public class GestionOficinasApplication {
                 a.setFechaActaOcupacion(LocalDate.of(2026, 6, 20));
                 a.setImporteJustiprecio(18500.75);
                 a.setEstadoPago("PAGADO");
-                a.setFinca(f); // Vinculación OneToOne
+                a.setFinca(f);
                 actaRepository.save(a);
-                System.out.println("[ÉXITO] HITO JURÍDICO 'ACT-2026-089' INYECTADO CORRECTAMENTE");
+            }
+
+            // 7. NUEVA ALERTA DE PRUEBA INYECTADA EN H2 RAM
+            if (alertaRepository.count() == 0) {
+                Alerta al = new Alerta();
+                al.setTitulo("Fin del Plazo de Alegaciones");
+                al.setDescripcion("Fecha límite jurídica para la recepción de enmiendas y recursos de la traza ferroviaria.");
+                al.setFechaVencimiento(LocalDate.of(2026, 11, 24));
+                al.setCriticidad("ALTA");
+                al.setEstado("ACTIVA");
+                al.setProyecto(exp); // Vinculada al Eje Atlántico
+                alertaRepository.save(al);
+                System.out.println("[ÉXITO] HITO TEMPORAL / ALERTA 'Fin del Plazo' INYECTADA EN RAM");
             }
             
             System.out.println("****************************************************************");
-            System.out.println("[INFO] Datos cargados con éxito. Ecosistema listo.");
+            System.out.println("[INFO] Datos cargados con éxito. Calendario técnico disponible.");
             System.out.println("****************************************************************");
         };
     }

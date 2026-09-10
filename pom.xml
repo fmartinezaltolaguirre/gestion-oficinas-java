@@ -11,14 +11,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.5.0</version>
         <relativePath/>
     </parent>
 
     <properties>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>25</java.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -70,8 +70,8 @@
 
     <build>
         <plugins>
-            <!-- Compilador aislado para blindar Java 17 en tu WSL -->
-            <plugin>
+            <!-- Compilador aislado para Java 25 -->
+                        <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
@@ -80,14 +80,19 @@
                     <target>17</target>
                     <release>17</release>
                     <fork>true</fork>
+                    <!-- Ignora configuraciones externas del framework -->
+                    <compilerArgs>
+                        <arg>-Xlint:none</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
+
 
             <!-- Plugin oficial de Spring Boot para el empaquetado executable -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.0</version>
                 <configuration>
                     <mainClass>com.ineco.GestionOficinasApplication</mainClass>
                 </configuration>

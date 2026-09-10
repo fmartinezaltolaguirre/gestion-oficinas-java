@@ -108,9 +108,12 @@
     <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
     <a href="/gestion-oficinas/proyectos" class="nav-link-item" th:classappend="${paginaActiva == 'proyectos'} ? 'active' : ''">Proyectos</a>
     <a href="/gestion-oficinas/propietarios" class="nav-link-item" th:classappend="${paginaActiva == 'propietarios'} ? 'active' : ''">Afectados</a>
-<a href="/gestion-oficinas/fincas" class="nav-link-item" th:classappend="${paginaActiva == 'fincas'} ? 'active' : ''">Fincas</a>
- <a href="/gestion-oficinas/actas" class="nav-link-item" th:classappend="${paginaActiva == 'actas'} ? 'active' : ''">Actas</a>
+    <a href="/gestion-oficinas/fincas" class="nav-link-item" th:classappend="${paginaActiva == 'fincas'} ? 'active' : ''">Fincas</a>
+    <a href="/gestion-oficinas/actas" class="nav-link-item" th:classappend="${paginaActiva == 'actas'} ? 'active' : ''">Actas</a>
+    <!-- NUEVA PESTAÑA DE ALERTAS Y CALENDARIO JURÍDICO -->
+    <a href="/gestion-oficinas/alertas" class="nav-link-item" th:classappend="${paginaActiva == 'alertas'} ? 'active' : ''">Calendario</a>
 </div>
+
             </div>
             <div class="user-zone">
                 <span class="username-text" th:text="${#authentication.name}">Usuario</span>
