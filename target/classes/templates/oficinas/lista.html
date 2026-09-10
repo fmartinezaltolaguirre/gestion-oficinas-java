@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Oficinas - Ineco</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        .navbar-ineco {
+            background-color: #0056b3;
+        }
+        .wrapper {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Barra de Navegación Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ineco shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">ineco</a>
+            <button class="navbar-collapse collapse navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/oficinas}"><i class="bi bi-building"></i> Oficinas</a>
+                    </li>
+                    <!-- El menú de usuarios solo se muestra visualmente si se tiene el rol de administración -->
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3" th:text="${#authentication.name}">Usuario</span>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Salir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark">Gestión de Oficinas Técnicas</h2>
+                <p class="text-muted">Módulo de control de infraestructuras y delegaciones territoriales.</p>
+            </div>
+            <!-- Botón para añadir registro -->
+            <a th:href="@{/oficinas/nueva}" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle"></i> Registrar Oficina
+            </a>
+        </div>
+
+        <!-- Tabla de Datos -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">ID</th>
+                                <th>Código Interno</th>
+                                <th>Nombre de la Oficina</th>
+                                <th>Ubicación / Región</th>
+                                <th class="text-end pe-4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Si la lista está vacía -->
+                            <tr th:if="${#lists.isEmpty(oficinas)}">
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    No hay ninguna oficina técnica registrada en el sistema.
+                                </td>
+                            </tr>
+                            <!-- Bucle que recorre la lista enviada por el controlador -->
+                            <tr th:each="o : ${oficinas}">
+                                <td class="ps-4 fw-bold text-secondary" th:text="${o.id}">1</td>
+                                <td>
+                                    <span class="badge bg-secondary text-uppercase" th:text="${o.codigoOficina}">OFI-MDR</span>
+                                </td>
+                                <td class="fw-semibold text-dark" th:text="${o.nombre}">Delegación Madrid</td>
+                                <td th:text="${o.ubicacion}">Madrid Centro</td>
+                                <td class="text-end pe-4">
+                                    <a th:href="@{/oficinas/editar/{id}(id=${o.id})}" class="btn btn-sm btn-outline-secondary me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/oficinas/eliminar/{id}(id=${o.id})}" 
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('¿Seguro que deseas eliminar esta oficina? Se borrarán sus dependencias.');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://jsdelivr.net"></script>
+</body>
+</html>

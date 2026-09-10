@@ -28,7 +28,7 @@ public class UsuarioService implements UserDetailsService {
 
     /**
      * Método requerido por Spring Security para verificar las credenciales en el Login.
-     * Transforma nuestra entidad 'Usuario' al modelo interno de seguridad de Spring.
+     * Añade la validación forzada del prefijo ROLE_ exigido por el framework.
      */
     @Override
     @Transactional(readOnly = true)
@@ -36,11 +36,17 @@ public class UsuarioService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado en el sistema corporativo: " + username));
 
-        return new User(
-                usuario.getUsername(),
-                usuario.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol()))
-        );
+        // Nos aseguramos de que el rol tenga el formato 'ROLE_NOMBRE' exigido por Spring Security
+        String nombreRol = usuario.getRol();
+        if (nombreRol != null && !nombreRol.startsWith("ROLE_")) {
+            nombreRol = "ROLE_" + nombreRol;
+        }
+
+        return User.builder()
+                .username(usuario.getUsername())
+                .password(usuario.getPassword())
+                .authorities(new SimpleGrantedAuthority(nombreRol))
+                .build();
     }
 
     /**

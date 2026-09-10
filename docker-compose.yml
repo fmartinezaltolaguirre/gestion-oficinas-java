@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Servicio 1: La Base de Datos PostgreSQL
   db:
@@ -12,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data # <-- DEJA SOLO ESTA LÍNEA DE VOLUMEN
 
   # Servicio 2: Tu aplicación Spring Boot
   app:
@@ -23,7 +21,6 @@ services:
     depends_on:
       - db
     environment:
-      # Sobrescribimos la URL del application.yml para que apunte al contenedor "db" en vez de a localhost
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/gestion_oficinas_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=tu_contraseña_aqui
