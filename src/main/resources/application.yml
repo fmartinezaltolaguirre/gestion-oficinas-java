@@ -14,19 +14,18 @@ spring:
     password: 
     driver-class-name: org.h2.Driver
 
+  # DESACTIVAR INICIALIZADOR POR SCRIPT (Evita que lea data.sql)
   sql:
     init:
-      mode: always # Obliga a cargar los usuarios del data.sql siempre
+      mode: never # <-- Cambiado de 'always' a 'never'
 
+  # Configuración del motor de persistencia (Hibernate / JPA)
   jpa:
     hibernate:
-      ddl-auto: create # Genera las tablas limpias al arrancar
-    show-sql: true
-    defer-datasource-initialization: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
+      ddl-auto: create # Genera las tablas limpias al arrancar de forma nativa
+    show-sql: true     # Muestra las consultas SQL en la consola
+    defer-datasource-initialization: false # <-- Cambiado a false porque ya no hay script que esperar
+
 
   thymeleaf:
     prefix: classpath:/templates/

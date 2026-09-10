@@ -21,13 +21,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Permitir libre acceso a recursos estáticos e imágenes
+                // PERMITIR LIBRE ACCESO A RECURSOS LOCALES Y SERVIDORES EXTERNOS DE BOOTSTRAP
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/error").permitAll()
+                .requestMatchers("https://jsdelivr.net**").permitAll() // <-- OBLIGATORIO PARA LOGRAR EL DISEÑO ELEGANTE
+                
                 // La gestión de usuarios requiere rol ADMIN
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
                 // El resto de la aplicación requiere autenticación
                 .anyRequest().authenticated()
             )
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login") // Fuerza la ruta de procesamiento estándar
