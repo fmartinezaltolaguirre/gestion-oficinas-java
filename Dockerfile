@@ -1,4 +1,4 @@
-# Fase 1: Compilación del proyecto usando Maven y Java 17
+# Fase 1: Compilación del proyecto usando Maven y Java 25
  WORKDIR /app
 COPY pom.xml .
 COPY src ./src

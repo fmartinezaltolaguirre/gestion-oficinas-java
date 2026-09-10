@@ -1,6 +1,5 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/service/SharePointService.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/service/OficinaService.java
-/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/GestionOficinasApplication.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/service/UsuarioService.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/OficinaController.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/LoginServlet.java
@@ -9,6 +8,7 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/OficinaRepository.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/OficinaServlet.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/config/SecurityConfig.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/GestionOficinasApplication.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/util/GraphClient.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/filter/AuthFilter.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/ErrorServlet.java

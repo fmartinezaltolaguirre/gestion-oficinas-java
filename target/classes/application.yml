@@ -1,5 +1,5 @@
 server:
-  port: 8089 # Usaremos el puerto 8089 para evitar colisiones
+  port: 8089 # Puerto libre para esquivar el Nginx de Kubernetes Kind
   servlet:
     context-path: /gestion-oficinas
 
@@ -7,7 +7,7 @@ spring:
   application:
     name: gestion-oficinas-java
 
-  # Base de datos H2 en memoria (No requiere instalación ni Docker)
+  # Base de datos en memoria (Autocreada en RAM)
   datasource:
     url: jdbc:h2:mem:gestion_oficinas_db;DB_CLOSE_DELAY=-1
     username: sa
@@ -16,25 +16,30 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: always # Obliga a cargar los usuarios del data.sql siempre
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create # Genera las tablas limpias al arrancar
     show-sql: true
     defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
 
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML
     cache: false
-
+# Credenciales para el acceso automatizado al SharePoint Corporativo (Vacías para pruebas locales)
 azure:
   activedirectory:
-    tenant-id: "tu-id"
-    client-id: "tu-id"
-    client-secret: "tu-clave"
+    tenant-id: ""
+    client-id: ""
+    client-secret: ""
 
+# Identificador del sitio de SharePoint asignado a la oficina técnica
 sharepoint:
-  site-id: "://sharepoint.com,id,id"
+  site-id: ""

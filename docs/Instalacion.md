@@ -1,7 +1,7 @@
 # Instalación y ejecución
 
 ## Requisitos
-- Java JDK 17+ instalado
+- Java JDK 25+ instalado
 - Maven 3.6+ (o Gradle si el proyecto lo usa)
 - Git
 - Base de datos: H2 (desarrollo) o PostgreSQL/MySQL (producción)
@@ -40,7 +40,7 @@ Para desarrollo rápido puedes usar H2 en memoria; para producción configura Po
 ## Docker (opcional)
 Dockerfile básico:
 ```dockerfile
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:25-jdk-jammy
 COPY target/gestion-oficinas-java-<version>.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 ```

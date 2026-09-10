@@ -24,16 +24,21 @@ public class SharePointService {
     private String siteId;
 
     private GraphServiceClient graphClient;
-
     @PostConstruct
     public void inicializarConexion() {
-        ClientSecretCredential credential = new ClientSecretCredentialBuilder()
-                .tenantId(tenantId)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .build();
+        try {
+            // Intenta conectar usando los parámetros del application.yml
+            ClientSecretCredential credential = new ClientSecretCredentialBuilder()
+                    .tenantId(tenantId)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+                    .build();
 
-        this.graphClient = new GraphServiceClient(credential);
+            this.graphClient = new GraphServiceClient(credential);
+        } catch (Exception e) {
+            // En entorno local, si las claves no existen, evitamos tumbar la aplicación
+            System.out.println("[AVISO] SharePoint no inicializado. Modo local activo: " + e.getMessage());
+        }
     }
 
     /**

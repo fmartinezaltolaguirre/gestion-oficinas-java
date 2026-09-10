@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Security remediation tasks derived from assessment report report-20260910093107.",
+  "tasks": [
+    {
+      "type": "transform",
+      "id": "001-resolve-cwe-259-hard-coded-passwords",
+      "description": "Remove hard-coded password values identified by CWE-259.",
+      "reason": "The assessment found password material in application configuration, seed data, and Docker Compose configuration.",
+      "requirements": "Addresses issue CWE-259 (Use of Hard-coded Password) from assessment report report-20260910093107. Remove password values from src/main/resources/application.yml, src/main/resources/import.sql, and docker-compose.yml where they represent application or external-component credentials. Preserve required local development behavior through externally supplied configuration or an explicitly documented non-secret test fixture policy. Do not commit replacement secrets.",
+      "dependencies": [],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "transform",
+      "id": "002-resolve-cwe-778-security-event-logging",
+      "description": "Record security-critical authentication and logout events with useful audit detail.",
+      "reason": "The assessment found that authentication failures, successful logins, and logout events are not implemented as application security-event logs.",
+      "requirements": "Addresses issue CWE-778 (Insufficient Logging) from assessment report report-20260910093107. Add security-event logging for form-login success, authentication failure, and logout flows controlled by SecurityConfig.java. Configure the logging implementation represented by log4j2.xml, include useful event context without passwords, tokens, or other secrets, and preserve the existing user-facing authentication behavior.",
+      "dependencies": [
+        "001-resolve-cwe-259-hard-coded-passwords"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "transform",
+      "id": "003-resolve-cwe-798-hard-coded-credentials",
+      "description": "Remove remaining hard-coded credential artifacts from application and deployment configuration.",
+      "reason": "The assessment identified fixed credentials and credential-like values that can be reused outside their intended environment.",
+      "requirements": "Addresses issue CWE-798 (Use of Hard-coded Credentials) from assessment report report-20260910093107. Audit application.yml, import.sql, and docker-compose.yml for fixed passwords, client secrets, credential hashes documented as default passwords, and matching connection credentials. Replace operational credentials with externally supplied configuration or approved secret storage, keep test fixtures clearly non-production and non-secret where required, and document required environment variables without including their values.",
+      "dependencies": [
+        "002-resolve-cwe-778-security-event-logging"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "security",
+      "id": "004-fix-cve-vulnerabilities",
+      "description": "Scan project dependencies and remediate the reported CVE vulnerabilities.",
+      "reason": "The assessment reported a high-severity PostgreSQL JDBC vulnerability affecting version 42.6.2.",
+      "requirements": "Addresses CVE-2026-42198 from assessment report report-20260910093107. Scan direct project dependencies for known CVEs, upgrade org.postgresql:postgresql from 42.6.2 to the minimum compatible patched version recommended by the report (42.7.11 or later), document any compatibility or breaking-change risk, rebuild the project, rerun the existing unit tests, and confirm the final dependency scan has no unresolved in-scope CVE findings.",
+      "dependencies": [
+        "003-resolve-cwe-798-hard-coded-credentials"
+      ],
+      "skills": [
+        {
+          "name": "validate-cves-and-fix",
+          "location": "builtin"
+        }
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    }
+  ],
+  "metadata": {
+    "planName": "security-remediation-20260910093107",
+    "projectName": "gestion-oficinas-java",
+    "language": "java",
+    "createdAt": "2026-09-10T09:40:00Z",
+    "version": "1.0"
+  }
+}
