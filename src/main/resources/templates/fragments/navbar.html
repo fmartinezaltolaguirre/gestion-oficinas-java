@@ -3,118 +3,56 @@
 <head></head>
 <body>
 
-    <!-- Definimos el fragmento común llamado 'menuCorporativo' con sus estilos fijos -->
     <div th:fragment="menuCorporativo(paginaActiva)">
         
-        <!-- ESTILOS DEL MENÚ ENCAPSULADOS (Fuerzan el diseño elegante en cualquier pantalla) -->
         <style>
-            .navbar-ineco {
-                background-color: #1e293b !important; /* Gris pizarra oscuro corporativo */
-                border-bottom: 3px solid #0056b3 !important; /* Línea azul Ineco */
-                padding: 15px 30px !important;
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-                box-sizing: border-box !important;
-                width: 100% !important;
-            }
+            .navbar-ineco { background-color: #1e293b !important; border-bottom: 3px solid #0056b3 !important; padding: 12px 30px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important; box-sizing: border-box !important; width: 100% !important; }
+            .navbar-brand-elegant { display: flex !important; align-items: center !important; text-decoration: none !important; }
+            .navbar-brand-elegant img { max-height: 32px !important; object-fit: contain !important; background: #ffffff !important; padding: 4px !important; border-radius: 6px !important; }
+            .navbar-brand-elegant span { color: #ffffff !important; font-weight: 500 !important; margin-left: 12px !important; font-size: 0.95rem !important; letter-spacing: 0.5px !important; }
+            .nav-links-container { display: flex !important; gap: 20px !important; margin-left: 30px !important; align-items: center !important; }
+            .nav-link-item { color: #94a3b8 !important; text-decoration: none !important; font-size: 0.9rem !important; font-weight: 600 !important; transition: color 0.2s ease !important; }
+            .nav-link-item:hover { color: #ffffff !important; }
+            .nav-link-item.active { color: #ffffff !important; border-bottom: 2px solid #ffffff !important; padding-bottom: 2px !important; }
+            
+            /* Barra de búsqueda NLP */
+            .search-nlp-form { display: flex !important; align-items: center !important; background-color: rgba(255,255,255,0.08) !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 10px !important; padding: 4px 12px !important; width: 320px !important; margin-left: 20px !important; transition: all 0.3s ease !important; }
+            .search-nlp-form:focus-within { background-color: #ffffff !important; border-color: #0056b3 !important; width: 400px !important; }
+            .search-nlp-input { background: none !important; border: none !important; color: #ffffff !important; font-size: 0.85rem !important; width: 100% !important; outline: none !important; }
+            .search-nlp-form:focus-within .search-nlp-input { color: #1e293b !important; }
+            .search-nlp-input::placeholder { color: #64748b !important; }
+            .search-nlp-btn { background: none !important; border: none !important; color: #94a3b8 !important; cursor: pointer !important; padding: 0 !important; font-size: 0.9rem !important; }
+            .search-nlp-form:focus-within .search-nlp-btn { color: #0056b3 !important; }
 
-            .navbar-brand-elegant {
-                display: flex !important;
-                align-items: center !important;
-                text-decoration: none !important;
-            }
-
-            .navbar-brand-elegant img {
-                max-height: 32px !important;
-                object-fit: contain !important;
-                background: #ffffff !important;
-                padding: 4px !important;
-                border-radius: 6px !important;
-            }
-
-            .navbar-brand-elegant span {
-                color: #ffffff !important;
-                font-weight: 500 !important;
-                margin-left: 12px !important;
-                font-size: 0.95rem !important;
-                letter-spacing: 0.5px !important;
-            }
-
-            .nav-links-container {
-                display: flex !important;
-                gap: 24px !important;
-                margin-left: 40px !important;
-            }
-
-            .nav-link-item {
-                color: #94a3b8 !important; /* Gris atenuado elegante para pestañas inactivas */
-                text-decoration: none !important;
-                font-size: 0.95rem !important;
-                font-weight: 600 !important;
-                transition: color 0.2s ease !important;
-                letter-spacing: 0.3px !important;
-            }
-
-            .nav-link-item:hover {
-                color: #ffffff !important;
-            }
-
-            .nav-link-item.active {
-                color: #ffffff !important; /* Blanco puro para la pestaña de la sección actual */
-                border-bottom: 2px solid #ffffff !important;
-                padding-bottom: 2px !important;
-            }
-
-            .user-zone {
-                display: flex !important;
-                align-items: center !important;
-                gap: 16px !important;
-            }
-
-            .username-text {
-                color: #94a3b8 !important;
-                font-size: 0.9rem !important;
-                font-weight: 500 !important;
-            }
-
-            .btn-logout {
-                background-color: rgba(255, 255, 255, 0.1) !important;
-                color: #ffffff !important;
-                border: 1px solid rgba(255, 255, 255, 0.2) !important;
-                padding: 6px 14px !important;
-                border-radius: 8px !important;
-                font-size: 0.85rem !important;
-                font-weight: 500 !important;
-                cursor: pointer !important;
-                transition: all 0.2s !important;
-            }
-
-            .btn-logout:hover {
-                background-color: rgba(255, 255, 255, 0.2) !important;
-            }
+            .user-zone { display: flex !important; align-items: center !important; gap: 16px !important; }
+            .username-text { color: #94a3b8 !important; font-size: 0.9rem !important; font-weight: 500 !important; }
+            .btn-logout { background-color: rgba(255, 255, 255, 0.1) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; padding: 6px 14px !important; border-radius: 8px !important; font-size: 0.85rem !important; cursor: pointer !important; }
+            .btn-logout:hover { background-color: rgba(255, 255, 255, 0.2) !important; }
         </style>
 
-        <!-- ESTRUCTURA DEL MENÚ -->
         <div class="navbar-ineco">
             <div style="display: flex; align-items: center;">
                 <a class="navbar-brand-elegant" href="/gestion-oficinas/oficinas">
                     <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
                     <span>| Panel Técnico</span>
                 </a>
-<div class="nav-links-container">
-    <a href="/gestion-oficinas/oficinas" class="nav-link-item" th:classappend="${paginaActiva == 'oficinas'} ? 'active' : ''">Oficinas</a>
-    <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
-    <a href="/gestion-oficinas/proyectos" class="nav-link-item" th:classappend="${paginaActiva == 'proyectos'} ? 'active' : ''">Proyectos</a>
-    <a href="/gestion-oficinas/propietarios" class="nav-link-item" th:classappend="${paginaActiva == 'propietarios'} ? 'active' : ''">Afectados</a>
-    <a href="/gestion-oficinas/fincas" class="nav-link-item" th:classappend="${paginaActiva == 'fincas'} ? 'active' : ''">Fincas</a>
-    <a href="/gestion-oficinas/actas" class="nav-link-item" th:classappend="${paginaActiva == 'actas'} ? 'active' : ''">Actas</a>
-    <!-- NUEVA PESTAÑA DE ALERTAS Y CALENDARIO JURÍDICO -->
-    <a href="/gestion-oficinas/alertas" class="nav-link-item" th:classappend="${paginaActiva == 'alertas'} ? 'active' : ''">Calendario</a>
-</div>
-
+                <div class="nav-links-container">
+                    <a href="/gestion-oficinas/oficinas" class="nav-link-item" th:classappend="${paginaActiva == 'oficinas'} ? 'active' : ''">Oficinas</a>
+                    <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
+                    <a href="/gestion-oficinas/proyectos" class="nav-link-item" th:classappend="${paginaActiva == 'proyectos'} ? 'active' : ''">Proyectos</a>
+                    <a href="/gestion-oficinas/propietarios" class="nav-link-item" th:classappend="${paginaActiva == 'propietarios'} ? 'active' : ''">Afectados</a>
+                    <a href="/gestion-oficinas/fincas" class="nav-link-item" th:classappend="${paginaActiva == 'fincas'} ? 'active' : ''">Fincas</a>
+                    <a href="/gestion-oficinas/actas" class="nav-link-item" th:classappend="${paginaActiva == 'actas'} ? 'active' : ''">Actas</a>
+                    <a href="/gestion-oficinas/alertas" class="nav-link-item" th:classappend="${paginaActiva == 'alertas'} ? 'active' : ''">Calendario</a>
+                </div>
+                
+                <!-- BUSCADOR INTELIGENTE POR LENGUAJE NATURAL INCORPORADO -->
+                <form th:action="@{/buscar}" method="get" class="search-nlp-form">
+                    <input type="text" name="q" th:value="${query}" class="search-nlp-input" placeholder="Busca en lenguaje natural... (ej: fincas > 1000m)">
+                    <button type="submit" class="search-nlp-btn">🔍</button>
+                </form>
             </div>
+            
             <div class="user-zone">
                 <span class="username-text" th:text="${#authentication.name}">Usuario</span>
                 <form th:action="@{/logout}" method="post" style="margin: 0;">
@@ -127,3 +65,4 @@
 
 </body>
 </html>
+

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda Inteligente - Ineco</title>
+    
+    <!-- BLOQUE DE ESTILOS PREMIUM ENCAPSULADO (Blindado contra bloqueos) -->
+    <style>
+        :root {
+            --ineco-blue: #0056b3;
+            --dark-elegant: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--bg-light) !important;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--dark-elegant);
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .search-summary-card {
+            background: #ffffff !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px !important;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02) !important;
+        }
+
+        .search-summary-card h3 {
+            margin: 0 0 8px 0 !important;
+            font-size: 1.4rem !important;
+            font-weight: 700 !important;
+        }
+
+        .search-summary-card p {
+            margin: 0 !important;
+            color: var(--text-muted) !important;
+            font-size: 0.95rem !important;
+        }
+
+        .query-badge {
+            background-color: #f1f5f9 !important;
+            color: var(--dark-elegant) !important;
+            padding: 4px 10px !important;
+            border-radius: 8px !important;
+            font-family: monospace !important;
+            font-weight: 600 !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        .section-title {
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            margin: 35px 0 15px 0 !important;
+            border-left: 4px solid var(--ineco-blue) !important;
+            padding-left: 12px !important;
+            color: var(--dark-elegant) !important;
+        }
+
+        .card-table {
+            background: #ffffff !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.01) !important;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .elegant-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .elegant-table th {
+            background-color: #f8fafc !important;
+            padding: 14px 20px !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            color: var(--text-muted) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            font-weight: 600 !important;
+        }
+
+        .elegant-table td {
+            padding: 16px 20px !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            font-size: 0.95rem !important;
+        }
+
+        .elegant-table tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        .code-inline {
+            font-family: monospace !important;
+            background-color: #f1f5f9 !important;
+            padding: 3px 6px !important;
+            border-radius: 6px !important;
+            color: #334155 !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        .badge-generic {
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            padding: 4px 10px !important;
+            border-radius: 20px !important;
+            display: inline-block !important;
+            background-color: #e0f2fe !important;
+            color: #0369a1 !important;
+            border: 1px solid #bae6fd !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Enlazamos la barra superior unificada pasándole una sección genérica -->
+    <div th:replace="~{fragments/navbar :: menuCorporativo('buscar')}"></div>
+    <div class="main-container">
+        <!-- Tarjeta de Resumen -->
+        <div class="search-summary-card">
+            <h3>Resultado de Análisis Semántico</h3>
+            <p>Se ha procesado la consulta técnica libre: <span class="query-badge" th:text="${query}">consulta</span></p>
+        </div>
+
+        <!-- Panel de Proyectos -->
+        <div th:if="${proyectos != null}">
+            <div class="section-title">Expedientes y Proyectos de Obra Hallados</div>
+            <div class="card-table">
+                <table class="elegant-table">
+                    <thead>
+                        <tr><th style="width: 70px;">ID</th><th style="width: 150px;">Código</th><th>Denominación del Proyecto</th><th>Tipología de Obra</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(proyectos)}"><td colspan="4" style="color: var(--text-muted); padding: 20px; font-size: 0.9rem;">No hay proyectos coincidentes.</td></tr>
+                        <tr th:each="p : ${proyectos}">
+                            <td style="font-weight: 700; color: #94a3b8;" th:text="${p.id}">1</td>
+                            <td><span class="code-inline" th:text="${p.codigoExpediente}">EXP</span></td>
+                            <td style="font-weight: 600;" th:text="${p.nombre}">Nombre</td>
+                            <td><span class="badge-generic" th:text="${p.tipoInfraestructura}">Ferroviaria</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Panel de Fincas -->
+        <div th:if="${fincas != null}">
+            <div class="section-title">Parcelas e Inventario Catastral Hallados</div>
+            <div class="card-table">
+                <table class="elegant-table">
+                    <thead>
+                        <tr><th style="width: 70px;">ID</th><th style="width: 140px;">Ref. Finca</th><th>Polígono</th><th>Parcela</th><th>Superficie Afectada</th><th>Suelo / Cultivo</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(fincas)}"><td colspan="6" style="color: var(--text-muted); padding: 20px; font-size: 0.9rem;">No hay predios coincidentes.</td></tr>
+                        <tr th:each="f : ${fincas}">
+                            <td style="font-weight: 700; color: #94a3b8;" th:text="${f.id}">1</td>
+                            <td><span class="code-inline" th:text="${f.numeroExpedienteFinca}">LU</span></td>
+                            <td th:text="${f.poligono}">0</td>
+                            <td th:text="${f.parcela}">0</td>
+                            <td style="font-weight: 600; color: #0284c7;" th:text="${f.superficieAfectada} + ' m²'">0 m²</td>
+                            <td><span class="badge-generic" style="background-color:#f0fdf4; color:#166534; border-color:#dcfce7;" th:text="${f.tipoCultivo}">Prado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Panel de Propietarios -->
+        <div th:if="${propietarios != null}">
+            <div class="section-title">Censo de Propietarios y Titulares Hallados</div>
+            <div class="card-table">
+                <table class="elegant-table">
+                    <thead>
+                        <tr><th style="width: 70px;">ID</th><th style="width: 150px;">DNI / CIF</th><th>Nombre o Razón Social</th><th>Término Municipal</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(propietarios)}"><td colspan="4" style="color: var(--text-muted); padding: 20px; font-size: 0.9rem;">No hay afectados coincidentes.</td></tr>
+                        <tr th:each="prop : ${propietarios}">
+                            <td style="font-weight: 700; color: #94a3b8;" th:text="${prop.id}">1</td>
+                            <td><span class="code-inline" th:text="${prop.dniCif}">12345</span></td>
+                            <td style="font-weight: 600;" th:text="${prop.nombreCompleto}">Nombre</td>
+                            <td th:text="${prop.municipio}">Madrid</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

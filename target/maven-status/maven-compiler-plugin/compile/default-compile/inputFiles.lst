@@ -12,6 +12,7 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Propietario.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Oficina.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/LoginController.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/BusquedaController.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Usuario.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/UsuarioRepository.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/util/Config.java
@@ -32,5 +33,6 @@
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/repository/FincaRepository.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/UsuarioServlet.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/controller/ActaController.java
+/home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/service/BusquedaNaturalService.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Acta.java
 /home/fernandomartinez/gestion-oficinas-java/src/main/java/com/ineco/model/Proyecto.java

@@ -13,6 +13,8 @@ com/ineco/service/OficinaService.class
 com/ineco/controller/FincaController.class
 com/ineco/controller/AlertaController.class
 com/ineco/controller/UsuarioController.class
+com/ineco/service/BusquedaNaturalService.class
+com/ineco/controller/BusquedaController.class
 com/ineco/controller/LoginController.class
 com/ineco/model/Usuario.class
 com/ineco/repository/OficinaRepository.class
