@@ -1,76 +1,66 @@
 package com.ineco.controller;
 
 import com.ineco.model.Oficina;
-import com.ineco.service.OficinaService;
+import com.ineco.repository.OficinaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/oficinas")
 public class OficinaController {
 
-    private final OficinaService oficinaService;
+    private final OficinaRepository oficinaRepository;
 
-    // Inyección de dependencias del servicio técnico
-    public OficinaController(OficinaService oficinaService) {
-        this.oficinaService = oficinaService;
+    public OficinaController(OficinaRepository oficinaRepository) {
+        this.oficinaRepository = oficinaRepository;
     }
 
-    /**
-     * Muestra el listado completo de oficinas.
-     * Mapea con la plantilla: src/main/resources/templates/oficinas/lista.html
-     */
+    // Listado general de sedes
     @GetMapping
     public String listarOficinas(Model model) {
-        List<Oficina> lista = oficinaService.listarTodas();
-        model.addAttribute("oficinas", lista);
-        return "oficinas/lista"; // Retorna la vista HTML
+        model.addAttribute("oficinas", oficinaRepository.findAll());
+        return "oficinas/lista";
     }
 
-    /**
-     * Muestra el formulario para dar de alta una nueva oficina.
-     * Mapea con la plantilla: src/main/resources/templates/oficinas/formulario.html
-     */
+    // Cargar formulario para nueva sede
     @GetMapping("/nueva")
     public String mostrarFormularioNueva(Model model) {
         model.addAttribute("oficina", new Oficina());
         return "oficinas/formulario";
     }
 
-    /**
-     * Procesa el envío del formulario para guardar o actualizar una oficina.
-     */
+    // Guardar registro
     @PostMapping("/guardar")
-    public String guardarOficina(@ModelAttribute("oficina") Oficina oficina, Model model) {
-        try {
-            oficinaService.guardar(oficina);
-            return "redirect:/oficinas"; // Redirige al listado general tras guardar con éxito
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "oficinas/formulario"; // Si hay error (ej. nombre duplicado), recarga el formulario
-        }
+    public String guardarOficina(@ModelAttribute Oficina oficina) {
+        oficinaRepository.save(oficina);
+        return "redirect:/oficinas";
     }
 
-    /**
-     * Muestra el formulario precargado con los datos para editar una oficina existente.
-     */
+    // Formulario de edición
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable("id") Long id, Model model) {
-        Oficina oficina = oficinaService.buscarPorId(id)
-                .orElseThrow(() -> new IllegalArgumentException("Oficina no encontrada con ID: " + id));
+        Oficina oficina = oficinaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de oficina inválido: " + id));
         model.addAttribute("oficina", oficina);
         return "oficinas/formulario";
     }
 
-    /**
-     * Procesa la eliminación de una oficina técnica.
-     */
+    // Eliminar registro
     @GetMapping("/eliminar/{id}")
     public String eliminarOficina(@PathVariable("id") Long id) {
-        oficinaService.eliminar(id);
+        Oficina oficina = oficinaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de oficina inválido: " + id));
+        oficinaRepository.delete(oficina);
         return "redirect:/oficinas";
+    }
+
+    // NUEVA RUTA: Ficha de detalle técnico y geográfico unificado
+    @GetMapping("/detalle/{id}")
+    public String verDetalleOficina(@PathVariable("id") Long id, Model model) {
+        Oficina oficina = oficinaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de oficina inválido: " + id));
+        model.addAttribute("oficina", oficina);
+        return "oficinas/detalle";
     }
 }

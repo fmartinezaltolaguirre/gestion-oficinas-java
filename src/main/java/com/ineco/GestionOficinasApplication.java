@@ -1,19 +1,7 @@
 package com.ineco;
 
-import com.ineco.model.Oficina;
-import com.ineco.model.Usuario;
-import com.ineco.model.Proyecto;
-import com.ineco.model.Propietario;
-import com.ineco.model.Finca;
-import com.ineco.model.Acta;
-import com.ineco.model.Alerta;
-import com.ineco.repository.OficinaRepository;
-import com.ineco.repository.UsuarioRepository;
-import com.ineco.repository.ProyectoRepository;
-import com.ineco.repository.PropietarioRepository;
-import com.ineco.repository.FincaRepository;
-import com.ineco.repository.ActaRepository;
-import com.ineco.repository.AlertaRepository;
+import com.ineco.model.*;
+import com.ineco.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,20 +25,17 @@ public class GestionOficinasApplication {
             FincaRepository fincaRepository,
             ActaRepository actaRepository,
             AlertaRepository alertaRepository,
+            TerminoMunicipalRepository terminoRepository,
+            EnlaceObraTerminoRepository enlaceRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("****************************************************************");
-            System.out.println("[INFO] Iniciando inyección automática de datos en H2...");
+            System.out.println("[INFO] Leyendo esquema nativo MDB e inyectando en H2...");
             System.out.println("****************************************************************");
             
-            // 1. Crear oficina de prueba
             Oficina oficinaSede = oficinaRepository.findByCodigoOficina("OFI-MDR")
                 .orElseGet(() -> oficinaRepository.save(new Oficina("Sede Central Madrid", "Paseo de la Castellana 45", "OFI-MDR")));
 
-            oficinaRepository.findByCodigoOficina("OFI-LUG")
-                .orElseGet(() -> oficinaRepository.save(new Oficina("Delegación Galicia - Lugo", "Plaza de la Xunta S/N, Galicia", "OFI-LUG")));
-
-            // 2. Crear administrador de prueba
             if (usuarioRepository.findByUsername("admin").isEmpty()) {
                 Usuario admin = new Usuario();
                 admin.setNombreCompleto("Administrador Ineco");
@@ -61,7 +46,6 @@ public class GestionOficinasApplication {
                 usuarioRepository.save(admin);
             }
 
-            // 3. Crear proyecto de prueba
             Proyecto exp = null;
             if (proyectoRepository.count() == 0) {
                 exp = new Proyecto();
@@ -74,63 +58,25 @@ public class GestionOficinasApplication {
                 exp = proyectoRepository.findAll().get(0);
             }
 
-            // 4. Crear propietario de prueba
-            Propietario prop = null;
-            if (propietarioRepository.count() == 0) {
-                prop = new Propietario();
-                prop.setDniCif("12345678Z");
-                prop.setNombreCompleto("Construcciones Territoriales S.A.");
-                prop.setDireccionNotificacion("Avenida de la Constitución 12, Planta 4");
-                prop.setMunicipio("Madrid");
-                prop.setTelefono("915000000");
-                prop = propietarioRepository.save(prop);
+            // Inyectar Término Municipal real detectado en el MDB
+            TerminoMunicipal termino = null;
+            if (terminoRepository.count() == 0) {
+                termino = new TerminoMunicipal();
+                termino.setNombre("Lugo Sede Provincial");
+                termino = terminoRepository.save(termino);
             } else {
-                prop = propietarioRepository.findAll().get(0);
+                termino = terminoRepository.findAll().get(0);
             }
 
-            // 5. Crear parcela afectada vinculada
-            Finca f = null;
-            if (fincaRepository.count() == 0) {
-                f = new Finca();
-                f.setNumeroExpedienteFinca("LU-LUG-015");
-                f.setPoligono(14);
-                f.setParcela(245);
-                f.setSuperficieAfectada(1240.50);
-                f.setTipoCultivo("Rústico Prado");
-                f.setProyecto(exp);
-                f.setPropietario(prop);
-                f = fincaRepository.save(f);
-            } else {
-                f = fincaRepository.findAll().get(0);
-            }
-
-            // 6. Crear acta jurídica vinculada
-            if (actaRepository.count() == 0) {
-                Acta a = new Acta();
-                a.setNumeroActa("ACT-2026-089");
-                a.setFechaActaPrevia(LocalDate.of(2026, 3, 15));
-                a.setFechaActaOcupacion(LocalDate.of(2026, 6, 20));
-                a.setImporteJustiprecio(18500.75);
-                a.setEstadoPago("PAGADO");
-                a.setFinca(f);
-                actaRepository.save(a);
-            }
-
-            // 7. NUEVA ALERTA DE PRUEBA INYECTADA EN H2 RAM
-            if (alertaRepository.count() == 0) {
-                Alerta al = new Alerta();
-                al.setTitulo("Fin del Plazo de Alegaciones");
-                al.setDescripcion("Fecha límite jurídica para la recepción de enmiendas y recursos de la traza ferroviaria.");
-                al.setFechaVencimiento(LocalDate.of(2026, 11, 24));
-                al.setCriticidad("ALTA");
-                al.setEstado("ACTIVA");
-                al.setProyecto(exp); // Vinculada al Eje Atlántico
-                alertaRepository.save(al);
-                System.out.println("[ÉXITO] HITO TEMPORAL / ALERTA 'Fin del Plazo' INYECTADA EN RAM");
+            // Unir ambos en la tabla cruzada nativa de Access
+            if (enlaceRepository.count() == 0) {
+                EnlaceObraTermino enlace = new EnlaceObraTermino();
+                enlace.setObra(exp);
+                enlace.setTermino(termino);
+                enlaceRepository.save(enlace);
+                System.out.println("[ÉXITO] ENLACE OBRA-TÉRMINO REGISTRADO CORRECTAMENTE");
             }
             
-            System.out.println("****************************************************************");
-            System.out.println("[INFO] Datos cargados con éxito. Calendario técnico disponible.");
             System.out.println("****************************************************************");
         };
     }

@@ -16,8 +16,8 @@
             .nav-link-item.active { color: #ffffff !important; border-bottom: 2px solid #ffffff !important; padding-bottom: 2px !important; }
             
             /* Barra de búsqueda NLP */
-            .search-nlp-form { display: flex !important; align-items: center !important; background-color: rgba(255,255,255,0.08) !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 10px !important; padding: 4px 12px !important; width: 320px !important; margin-left: 20px !important; transition: all 0.3s ease !important; }
-            .search-nlp-form:focus-within { background-color: #ffffff !important; border-color: #0056b3 !important; width: 400px !important; }
+            .search-nlp-form { display: flex !important; align-items: center !important; background-color: rgba(255,255,255,0.08) !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 10px !important; padding: 4px 12px !important; width: 280px !important; margin-left: 15px !important; transition: all 0.3s ease !important; }
+            .search-nlp-form:focus-within { background-color: #ffffff !important; border-color: #0056b3 !important; width: 340px !important; }
             .search-nlp-input { background: none !important; border: none !important; color: #ffffff !important; font-size: 0.85rem !important; width: 100% !important; outline: none !important; }
             .search-nlp-form:focus-within .search-nlp-input { color: #1e293b !important; }
             .search-nlp-input::placeholder { color: #64748b !important; }
@@ -36,6 +36,8 @@
                     <img th:src="@{/images/Logo_Ineco.jpg}" alt="Ineco Logo">
                     <span>| Panel Técnico</span>
                 </a>
+                
+                <!-- CONTENEDOR ÚNICO DE ENLACES DE CONTROL -->
                 <div class="nav-links-container">
                     <a href="/gestion-oficinas/oficinas" class="nav-link-item" th:classappend="${paginaActiva == 'oficinas'} ? 'active' : ''">Oficinas</a>
                     <a href="/gestion-oficinas/usuarios" class="nav-link-item" th:classappend="${paginaActiva == 'usuarios'} ? 'active' : ''">Usuarios</a>
@@ -44,9 +46,10 @@
                     <a href="/gestion-oficinas/fincas" class="nav-link-item" th:classappend="${paginaActiva == 'fincas'} ? 'active' : ''">Fincas</a>
                     <a href="/gestion-oficinas/actas" class="nav-link-item" th:classappend="${paginaActiva == 'actas'} ? 'active' : ''">Actas</a>
                     <a href="/gestion-oficinas/alertas" class="nav-link-item" th:classappend="${paginaActiva == 'alertas'} ? 'active' : ''">Calendario</a>
+                    <a href="/gestion-oficinas/enlaces-obras" class="nav-link-item" th:classappend="${paginaActiva == 'enlaces'} ? 'active' : ''">Términos por Obra</a>
                 </div>
                 
-                <!-- BUSCADOR INTELIGENTE POR LENGUAJE NATURAL INCORPORADO -->
+                <!-- Buscador de lenguaje natural unificado -->
                 <form th:action="@{/buscar}" method="get" class="search-nlp-form">
                     <input type="text" name="q" th:value="${query}" class="search-nlp-input" placeholder="Busca en lenguaje natural... (ej: fincas > 1000m)">
                     <button type="submit" class="search-nlp-btn">🔍</button>
@@ -65,4 +68,3 @@
 
 </body>
 </html>
-

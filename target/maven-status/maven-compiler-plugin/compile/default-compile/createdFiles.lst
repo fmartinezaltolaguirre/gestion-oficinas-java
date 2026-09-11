@@ -4,14 +4,18 @@ com/ineco/controller/OficinaController.class
 com/ineco/model/Alerta.class
 com/ineco/service/SharePointService.class
 com/ineco/repository/ActaRepository.class
+com/ineco/controller/EnlaceObraTerminoController.class
 com/ineco/config/SecurityConfig.class
 com/ineco/repository/FincaRepository.class
 com/ineco/controller/ProyectoController.class
 com/ineco/model/Proyecto.class
 com/ineco/model/Oficina.class
 com/ineco/service/OficinaService.class
+com/ineco/model/TerminoMunicipal.class
 com/ineco/controller/FincaController.class
 com/ineco/controller/AlertaController.class
+com/ineco/repository/TerminoMunicipalRepository.class
+com/ineco/repository/EnlaceObraTerminoRepository.class
 com/ineco/controller/UsuarioController.class
 com/ineco/service/BusquedaNaturalService.class
 com/ineco/controller/BusquedaController.class
@@ -21,6 +25,7 @@ com/ineco/repository/OficinaRepository.class
 com/ineco/model/Acta.class
 com/ineco/model/Finca.class
 com/ineco/GestionOficinasApplication.class
+com/ineco/model/EnlaceObraTermino.class
 com/ineco/controller/PropietarioController.class
 com/ineco/controller/ActaController.class
 com/ineco/repository/AlertaRepository.class
